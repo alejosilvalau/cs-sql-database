@@ -5,10 +5,10 @@ SELECT apellido, nombre, fecha_registro_agencia from personas;
 
 -- Exercise 5
 SELECT 
-	CONCAT(nombre, ' ' , apellido) 'Apellido y Nombre', 
-	fecha_nacimiento 'Fecha Nac.', 
-    telefono 'Telefono', 
-    direccion 'Direccion' 
+  CONCAT(nombre, ' ' , apellido) 'Apellido y Nombre', 
+  fecha_nacimiento 'Fecha Nac.', 
+  telefono 'Telefono', 
+  direccion 'Direccion' 
 FROM personas 
 WHERE dni IN(27890765, 29345777, 31345778)
 ORDER BY fecha_nacimiento;
