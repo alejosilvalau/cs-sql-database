@@ -1,6 +1,6 @@
 USE agencia_personal;
 
--- Exercise 3 (solicitudes_empresas, join cargo y empresas)
+-- Exercise 3
 SELECT e.razon_social, e.direccion, e.e_mail, c.desc_cargo, anios_experiencia FROM solicitudes_empresas se 
 INNER JOIN cargos c ON se.cod_cargo = c.cod_cargo
 INNER JOIN empresas e ON se.cuit = e.cuit
