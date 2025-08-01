@@ -27,7 +27,7 @@ FROM
 -- Exercise 3
 SELECT
   *,
-  DATEDIFF (fecha_finalizacion_contrato, fecha_caducidad) AS dias_antes
+  DATEDIFF(fecha_finalizacion_contrato, fecha_caducidad) AS dias_antes
 from
   contratos
 WHERE
@@ -41,7 +41,7 @@ SELECT
   com.anio_contrato,
   com.mes_contrato,
   com.importe_comision,
-  ADDDATE (CURDATE (), INTERVAL 2 MONTH) AS fecha_vencimiento
+  ADDDATE(CURDATE(), INTERVAL 2 MONTH) AS fecha_vencimiento
 FROM
   contratos con
   LEFT JOIN comisiones com ON con.nro_contrato = com.nro_contrato

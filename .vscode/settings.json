@@ -9,9 +9,9 @@
       "server": "localhost",
       "port": 3306,
       "driver": "MySQL",
-      "name": "agencia_personal",
-      "username": "root",
-      "database": "agencia_personal"
+      "name": "afatse",
+      "database": "afatse",
+      "username": "root"
     },
     {
       "mysqlOptions": {
@@ -22,8 +22,73 @@
       "server": "localhost",
       "port": 3306,
       "driver": "MySQL",
-      "name": "afatse",
-      "database": "afatse",
+      "name": "guarderia_gaghiel",
+      "database": "guarderia_gaghiel",
+      "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "agencia_personal",
+      "database": "agencia_personal",
+      "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "inmobiliaria_calciferhowl",
+      "database": "inmobiliaria_calciferhowl",
+      "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "convenciones_underground",
+      "database": "convenciones_underground",
+      "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "cooperativa_sustentable",
+      "database": "cooperativa_sustentable",
+      "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "role_play_events",
+      "database": "role_play_events",
       "username": "root"
     }
   ]
