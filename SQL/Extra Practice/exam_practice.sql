@@ -1,4 +1,4 @@
--- use guarderia_gaghiel;
+use guarderia_gaghiel;
 /* Listar las embarcaciones con contratos activos (sin fecha de baja) que se estén guardando
 en camas de sectores de tipo de operación manual. Indicar hin y nombre de la embarcación,
 fecha y hora del contrato, número de cama, código y nombre del sector donde se
@@ -43,7 +43,7 @@ from
 where
   s.tipo_doc = 'dni';
 
--- use convenciones_underground;
+use convenciones_underground;
 /* Listar los empleados con categoría supervisor y, solo para los que hayan ocupado el rol de
 “coordinador” para algún evento, mostrar el/los eventos para el que lo ocuparon, el resto
 mostrar null. Indicar cuil, nombre y apellido del empleado; id, nombre y tipo del evento. */
@@ -87,7 +87,7 @@ order by
   pre.cuit,
   pre_pres.fecha_hora_ini desc;
 
--- use cooperativa_sustentable;
+use cooperativa_sustentable;
 /* Listar los miembros y, si lo hubiera hecho, los lotes donde participó en la producción hace 2
 meses atrás (julio). Indicando: cuil, nombre y apellido del miembro y de los lotes producidos,
 código de producto, número de lote, fecha de producción y cantidad de horas. */
@@ -128,7 +128,7 @@ order by
   m.nombre,
   m.stock desc;
 
--- use role_play_events;
+use role_play_events;
 /* Listar para cada tour contratado entre enero y julio de 2022 (inclusive) los clientes que lo
 contrataron. Indicar número y temática del tour, fecha y hora de contratación y cuil, tipo y
 denominación del cliente. No se deberán mostrar registros repetidos y deberá ordenarse
