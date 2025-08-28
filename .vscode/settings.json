@@ -90,6 +90,19 @@
       "name": "role_play_events",
       "database": "role_play_events",
       "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "dsi_turnos",
+      "database": "dsi_turnos",
+      "username": "root"
     }
   ]
 }
