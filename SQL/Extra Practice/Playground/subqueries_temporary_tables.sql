@@ -171,3 +171,45 @@ where
   proms.prom > @prom_mkt1;
 
 drop temporary table if exists promedios;
+--
+-- Para usar de nuevo la tabla temporal, hay que crear una copia
+create temporary table if not EXISTS promedios_2
+select
+  *
+from
+  promedios;
+
+select
+  *
+from
+  promedios_2;
+
+select
+  *
+from
+  promedios;
+
+/* Mostrar los planes con mejor promedio de notas que el promedio general de planes */
+create temporary table if not exists promedios
+select
+  nom_plan,
+  avg(nota) prom
+from
+  evaluaciones
+group by
+  nom_plan;
+
+select
+  avg(prom) into @prom_general
+from
+  promedios;
+
+select
+  pc.*,
+  proms.prom,
+  @prom_general prom_general
+from
+  promedios proms
+  inner join plan_capacitacion pc on proms.nom_plan = pc.nom_plan
+where
+  proms.prom > @prom_general;
