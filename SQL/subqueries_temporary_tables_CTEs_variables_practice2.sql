@@ -129,7 +129,49 @@ where
   com.fecha_pago is not null
   and com.importe_comision < (
 select
-avg(importe_comision)
+  avg(importe_comision)
 from
-comisiones
+  comisiones
 );
+/*
+ * Exercise 5
+ * Determinar las empresas que pagaron en promedio la mayor de las comisiones.
+ */
+select
+  max(importe_comision) into @max_com
+from
+  comisiones;
+
+select
+  emp.razon_social,
+  avg(com.importe_comision) prom
+from
+  empresas emp
+  inner join contratos con on con.cuit = emp.cuit
+  inner join comisiones com on com.nro_contrato = con.nro_contrato
+group by
+  emp.razon_social
+having
+  prom = @max_com;
+
+/*
+ * Exercise 6
+ * Seleccionar los empleados que no tengan educación no formal o terciario. 
+ */
+select
+  per.apellido,
+  per.nombre
+from
+  personas per
+where
+  per.dni not in (
+    select
+      per.dni
+    from
+      personas per
+      inner join personas_titulos pt on per.dni = pt.dni
+      inner join titulos ti on pt.cod_titulo = ti.cod_titulo
+    where
+      ti.tipo_titulo = 'Educacion no formal'
+      or ti.tipo_titulo = 'Terciario'
+  );
