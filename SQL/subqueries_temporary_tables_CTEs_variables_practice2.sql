@@ -288,3 +288,28 @@ where
   year(ins.fecha_inscripcion) = 2014
 group by
   pc.nom_plan;
+/*
+ * Exercise 11
+ * Indicar el valor actual de los planes de Capacitación  
+ */
+drop temporary table if exists fecha_valores_plan;
+
+create temporary table fecha_valores_plan
+select
+  nom_plan,
+  max(fecha_desde_plan) as fecha_valor_actual
+from
+  valores_plan
+where
+  fecha_desde_plan <= NOW()
+group by
+  nom_plan;
+
+select
+  vp.*
+from
+  valores_plan vp
+  inner join fecha_valores_plan fvp on fvp.nom_plan = vp.nom_plan
+  and fvp.fecha_valor_actual = vp.fecha_desde_plan;
+
+drop temporary table if exists fecha_valores_plan;
