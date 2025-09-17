@@ -359,3 +359,67 @@ where
 drop temporary table if exists fecha_actual;
 
 drop temporary table if exists valor_actual;
+/*
+ * Exercise 13
+ * ¿Qué instructores que han dictado algún curso del Plan de Capacitación 
+ * “Marketing 1” el año 2014 y no vayan a dictarlo este año? (año 2015) 
+ */
+drop temporary table if exists instr_2015;
+
+create temporary table if not exists instr_2015
+select
+  ins.cuil
+from
+  instructores ins
+  inner join cursos_instructores ci on ins.cuil = ci.cuil
+  inner join cursos cur on cur.nom_plan = ci.nom_plan
+  and cur.nro_curso = ci.nro_curso
+where
+  ci.nom_plan = 'Marketing 1'
+  and year(cur.fecha_ini) = 2015;
+
+select
+  ins.cuil
+from
+  instructores ins
+  inner join cursos_instructores ci on ins.cuil = ci.cuil
+  inner join cursos cur on cur.nom_plan = ci.nom_plan
+  and cur.nro_curso = ci.nro_curso
+where
+  ci.nom_plan = 'Marketing 1'
+  and year(cur.fecha_ini) = 2014
+  and ins.cuil not in (
+    select
+      cuil
+    from
+      instr_2015
+  );
+
+drop temporary table if exists instr_2015;
+
+-- Si fuese "and year(cur.fecha_ini) = 2014 and year(cur.fecha_ini) <> 2015", 
+-- solo filtraría los cursos que se hicieron en 2014.
+--
+-- Segunda solución
+select
+  ins.cuil
+from
+  instructores ins
+  inner join cursos_instructores ci on ins.cuil = ci.cuil
+  inner join cursos cur on cur.nom_plan = ci.nom_plan
+  and cur.nro_curso = ci.nro_curso
+where
+  ci.nom_plan = 'Marketing 1'
+  and year(cur.fecha_ini) = 2014
+  and ins.cuil not in (
+    select
+      ci_sub.cuil
+    from
+      cursos_instructores ci_sub
+      inner join cursos cur_sub on ci_sub.nom_plan = cur_sub.nom_plan
+      and ci_sub.nro_curso = cur_sub.nro_curso
+    where
+      cur_sub.nom_plan = 'Marketing 1'
+      and year(cur_sub.fecha_ini) = 2015
+      and ci_sub.cuil = ins.cuil
+  );
