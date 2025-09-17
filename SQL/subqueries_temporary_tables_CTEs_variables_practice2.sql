@@ -263,3 +263,28 @@ group by
   alu.direccion
 having
   cant > @min_cant_ins;
+/*
+ * Exercise 10
+ * En el año 2014, qué cantidad de alumnos se han inscripto a los Planes de Capacitación 
+ * indicando para cada Plan de Capacitación la cantidad de alumnos inscriptos y 
+ * el porcentaje que representa respecto del total de inscriptos a los Planes de Capacitación 
+ * dictados en el año.
+ */
+select
+  count(1) into @cant_ins
+from
+  inscripciones
+where
+  year(fecha_inscripcion) = 2014;
+
+select
+  pc.nom_plan,
+  count(1) cant,
+  ((count(1) * 100) / @cant_ins) as '% Total'
+from
+  inscripciones ins
+  inner join plan_capacitacion pc on ins.nom_plan = pc.nom_plan
+where
+  year(ins.fecha_inscripcion) = 2014
+group by
+  pc.nom_plan;
