@@ -503,3 +503,36 @@ having
   prom > prom_curso;
 
 -- Solución de la cátedra
+drop temporary table if exists promedios;
+
+create temporary table promedios
+select
+  nom_plan,
+  nro_curso,
+  avg(nota) prome
+from
+  evaluaciones
+group by
+  nom_plan,
+  nro_curso;
+
+select
+  distinct ev.dni,
+  alu.nombre,
+  alu.apellido,
+  avg(ev.nota) prom,
+  p.prome prom_curso
+from
+  evaluaciones ev
+  inner join alumnos alu on ev.dni = alu.dni
+  inner join promedios p on ev.nom_plan = p.nom_plan
+  and ev.nro_curso = p.nro_curso
+group by
+  ev.dni,
+  alu.nombre,
+  alu.apellido,
+  p.prome
+having
+  avg(ev.nota) > p.prome;
+
+drop temporary table promedio;
