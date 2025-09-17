@@ -313,3 +313,49 @@ from
   and fvp.fecha_valor_actual = vp.fecha_desde_plan;
 
 drop temporary table if exists fecha_valores_plan;
+/*
+ * Exercise 12
+ * Plan de capacitacion mas barato. Indicar los datos del plan de capacitacion y el valor actual 
+ */
+drop temporary table if exists fecha_actual;
+
+drop temporary table if exists valor_actual;
+
+create temporary table if not exists fecha_actual
+select
+  nom_plan,
+  max(fecha_desde_plan) as fecha_valor_actual
+from
+  valores_plan
+where
+  fecha_desde_plan <= NOW()
+group by
+  nom_plan;
+
+create temporary table if not exists valor_actual
+select
+  vp.*
+from
+  valores_plan vp
+  inner join fecha_actual fa on fa.nom_plan = vp.nom_plan
+  and fa.fecha_valor_actual = vp.fecha_desde_plan;
+
+select
+  min(valor_plan) into @min_valor_actual
+from
+  valor_actual;
+
+select
+  pc.*,
+  vp.valor_plan
+from
+  valores_plan vp
+  inner join fecha_actual fa on fa.nom_plan = vp.nom_plan
+  and fa.fecha_valor_actual = vp.fecha_desde_plan
+  inner join plan_capacitacion pc on vp.nom_plan = pc.nom_plan
+where
+  vp.valor_plan = @min_valor_actual;
+
+drop temporary table if exists fecha_actual;
+
+drop temporary table if exists valor_actual;
