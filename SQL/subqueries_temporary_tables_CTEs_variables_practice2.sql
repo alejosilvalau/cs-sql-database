@@ -423,3 +423,50 @@ where
       and year(cur_sub.fecha_ini) = 2015
       and ci_sub.cuil = ins.cuil
   );
+/*
+ * Exercise 14
+ * Alumnos que tengan todas sus cuotas pagas hasta la fecha. 
+ */
+select
+  distinct alu.dni,
+  alu.nombre,
+  alu.apellido,
+  alu.tel,
+  alu.email,
+  alu.direccion
+from
+  alumnos alu
+  inner join cuotas cu on cu.dni = alu.dni
+where
+  alu.dni not in (
+    select
+      distinct dni
+    from
+      cuotas
+    where
+      fecha_pago is null
+      and fecha_pago <= now()
+  );
+
+-- Solución con subquery dependiente
+select
+  distinct alu.dni,
+  alu.nombre,
+  alu.apellido,
+  alu.tel,
+  alu.email,
+  alu.direccion
+from
+  alumnos alu
+  inner join cuotas cu on cu.dni = alu.dni
+where
+  alu.dni not in (
+    select
+      distinct dni
+    from
+      cuotas cu_sub
+    where
+      alu.dni = cu_sub.dni
+      and fecha_pago is null
+      and fecha_pago <= now()
+  );
