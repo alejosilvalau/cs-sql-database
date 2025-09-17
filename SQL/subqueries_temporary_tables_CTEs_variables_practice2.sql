@@ -536,3 +536,71 @@ having
   avg(ev.nota) > p.prome;
 
 drop temporary table promedio;
+/*
+ * Exercise 16
+ * Para conocer la disponibilidad de lugar en los cursos que empiezan 
+ * en abril para lanzar una campaña  se desea conocer la cantidad de 
+ * alumnos inscriptos a los cursos que comienzan a partir del 1/04/2014 
+ * indicando: Plan de Capacitación, curso, fecha de inicio, salón, cantidad 
+ * de alumnos inscriptos y diferencia con el cupo de alumnos registrado para el 
+ * curso que tengan al más del 80% de lugares disponibles respecto del cupo.
+ */
+-- Mi solución
+drop temporary table if exists cant_alumnos_cursos;
+
+create temporary table if not exists cant_alumnos_cursos
+select
+  cur.nom_plan,
+  cur.nro_curso,
+  count(1) cant_alu
+from
+  alumnos alu
+  inner join inscripciones ins on alu.dni = ins.dni
+  inner join cursos cur on cur.nom_plan = ins.nom_plan
+  and cur.nro_curso = ins.nro_curso
+where
+  cur.fecha_ini >= '2014-04-01'
+group by
+  cur.nom_plan,
+  cur.nro_curso;
+
+select
+  cur.nom_plan,
+  cur.nro_curso,
+  cur.fecha_ini,
+  cur.salon,
+  cur.cupo,
+  cac.cant_alu,
+  (cur.cupo - cac.cant_alu) lugares_libres
+from
+  cursos cur
+  inner join cant_alumnos_cursos cac on cur.nom_plan = cac.nom_plan
+  and cur.nro_curso = cac.nro_curso
+where
+  cur.fecha_ini >= '2014-04-01'
+having
+  lugares_libres > (cur.cupo * 0.8);
+
+drop temporary table if exists cant_alumnos_cursos;
+
+-- Solución de la cátedra
+select
+  cur.nro_curso,
+  fecha_ini,
+  salon,
+  cupo,
+  count(dni) Cantidad,
+  (cupo - count(dni)) as "Diferencia con Cupo"
+from
+  cursos cur
+  inner join inscripciones ins on cur.nro_curso = ins.nro_curso
+  and cur.nom_plan = ins.nom_plan
+where
+  fecha_ini >= "20140401"
+group by
+  cur.nro_curso,
+  fecha_ini,
+  salon,
+  cupo
+having
+  (cupo - count(dni)) > (cupo * 0.80);
