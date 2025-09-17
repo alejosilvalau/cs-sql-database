@@ -133,6 +133,7 @@ select
 from
   comisiones
 );
+
 /*
  * Exercise 5
  * Determinar las empresas que pagaron en promedio la mayor de las comisiones.
@@ -175,3 +176,90 @@ where
       ti.tipo_titulo = 'Educacion no formal'
       or ti.tipo_titulo = 'Terciario'
   );
+/*
+ * Exercise 7
+ * Mostrar los empleados cuyo salario supere al promedio de sueldo de la empresa que los contrató.
+ */
+drop temporary table if exists promedios;
+
+create temporary table promedios
+select
+  con.cuit,
+  avg(con.sueldo) avg_sueldo
+from
+  contratos con
+group by
+  con.cuit;
+
+select
+  con.cuit,
+  con.dni,
+  con.sueldo,
+  prom.avg_sueldo
+from
+  contratos con
+  inner join promedios prom on con.cuit = prom.cuit
+where
+  con.sueldo > prom.avg_sueldo;
+
+/*
+ * Exercise 8
+ * Determinar las empresas que pagaron en promedio la mayor o menor de las comisiones
+ */
+select
+  min(importe_comision),
+  max(importe_comision) into @min_com,
+  @max_com
+from
+  comisiones;
+
+select
+  emp.razon_social,
+  avg(com.importe_comision) promedio
+from
+  contratos con
+  inner join empresas emp on con.cuit = emp.cuit
+  inner join comisiones com on con.nro_contrato = com.nro_contrato
+where
+  com.fecha_pago is not null
+group by
+  emp.cuit
+having
+  promedio = @min_com
+  or promedio = @max_com;
+
+use afatse;
+
+/*
+ * Exercise 9
+ * Alumnos que se  hayan inscripto a más cursos que Antoine de Saint-Exupery. 
+ * Mostrar todos los datos de los alumnos, la cantidad de cursos a la que se inscribió y 
+ * cuantas veces más que Antoine de Saint-Exupery.
+ */
+select
+  count(1) into @min_cant_ins
+from
+  alumnos alu
+  inner join inscripciones ins on alu.dni = ins.dni
+where
+  alu.nombre = 'Antoine de'
+  and alu.apellido = 'Saint-Exupery'
+group by
+  ins.dni;
+
+select
+  alu.*,
+  count(1) cant,
+  count(1) - @min_cant_ins
+from
+  alumnos alu
+  inner join inscripciones ins on alu.dni = ins.dni
+group by
+  alu.dni,
+  alu.nombre,
+  alu.apellido,
+  alu.tel,
+  alu.email,
+  alu.direccion
+having
+  cant > @min_cant_ins;
