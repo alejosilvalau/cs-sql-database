@@ -470,3 +470,36 @@ where
       and fecha_pago is null
       and fecha_pago <= now()
   );
+/*
+ * Exercise 15
+ * Alumnos cuyo promedio supere al del curso que realizan. 
+ * Mostrar dni, nombre y apellido, promedio y promedio del curso. 
+ */
+-- Mi solución
+select
+  alu.dni,
+  alu.nombre,
+  alu.apellido,
+  AVG(eva.nota) as prom,
+  (
+    select
+      AVG(eva_sub.nota)
+    from
+      evaluaciones eva_sub
+    where
+      eva_sub.nom_plan = eva.nom_plan
+      and eva_sub.nro_curso = eva.nro_curso
+  ) as prom_curso
+from
+  evaluaciones eva
+  inner join alumnos alu on eva.dni = alu.dni
+group by
+  alu.dni,
+  alu.nombre,
+  alu.apellido,
+  eva.nom_plan,
+  eva.nro_curso
+having
+  prom > prom_curso;
+
+-- Solución de la cátedra
