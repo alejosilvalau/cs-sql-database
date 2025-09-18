@@ -604,3 +604,78 @@ group by
   cupo
 having
   (cupo - count(dni)) > (cupo * 0.80);
+/*
+ * Exercise 17
+ * Indicar el último incremento de los valores de los planes de capacitación, 
+ * consignando nombre del plan fecha del valor actual, fecha del valor anterior, 
+ * valor actual, valor anterior y diferencia entre los valores. Si el curso tiene 
+ * un único valor mostrar la fecha anterior en NULL el valor anterior en 0 y la 
+ * diferencia a 0. 
+ */
+drop temporary table if exists fecha_actual;
+
+drop temporary table if exists fecha_valor_actual;
+
+drop temporary table if exists fecha_anterior;
+
+drop temporary table if exists fecha_valor_anterior;
+
+create temporary table if not exists fecha_actual
+select
+  vp.nom_plan,
+  max(vp.fecha_desde_plan) fecha_valor_actual
+from
+  valores_plan vp
+where
+  vp.fecha_desde_plan <= now()
+group by
+  vp.nom_plan;
+
+create temporary table if not exists fecha_valor_actual
+select
+  vp.*
+from
+  valores_plan vp
+  inner join fecha_actual fa on fa.nom_plan = vp.nom_plan
+where
+  fa.fecha_valor_actual = vp.fecha_desde_plan;
+
+create temporary table if not exists fecha_anterior
+select
+  vp.nom_plan,
+  max(vp.fecha_desde_plan) fecha_valor_anterior
+from
+  valores_plan vp
+  inner join fecha_actual fa on fa.nom_plan = vp.nom_plan
+where
+  vp.fecha_desde_plan < fa.fecha_valor_actual
+group by
+  vp.nom_plan;
+
+create temporary table if not exists fecha_valor_anterior
+select
+  vp.*
+from
+  valores_plan vp
+  inner join fecha_anterior fa on fa.nom_plan = vp.nom_plan
+where
+  fa.fecha_valor_anterior = vp.fecha_desde_plan;
+
+select
+  p_act.nom_plan,
+  p_act.fecha_desde_plan max_fecha,
+  p_act.valor_plan,
+  p_ant.fecha_desde_plan ant_fecha,
+  coalesce(p_ant.valor_plan, 0) valor_plan,
+  coalesce((p_act.valor_plan - p_ant.valor_plan), 0) diferencia
+from
+  fecha_valor_actual p_act
+  left join fecha_valor_anterior p_ant on p_act.nom_plan = p_ant.nom_plan;
+
+drop temporary table if exists fecha_actual;
+
+drop temporary table if exists fecha_valor_actual;
+
+drop temporary table if exists fecha_anterior;
+
+drop temporary table if exists fecha_valor_anterior;
