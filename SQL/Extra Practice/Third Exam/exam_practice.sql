@@ -197,3 +197,68 @@ order by
   cant_sal desc;
 
 drop temporary table if exists cant_sal_soc;
+/* 304.4 - Socios que dejaron de hacer cursos.
+ * Listar los socios que se hayan 
+ * inscripto a cursos el año pasado pero no este.
+ * Indicar número y nombre del socio.
+ * Ordenar por nombre. */
+select
+  distinct s.numero,
+  s.nombre
+from
+  socio s
+  inner join inscripcion i on s.numero = i.numero_socio
+where
+  year(i.fecha_hora_inscripcion) = '2023'
+  and s.numero not in (
+    select
+      s_sub.numero
+    from
+      socio s_sub
+      inner join inscripcion i_sub on s_sub.numero = i_sub.numero_socio
+    where
+      year(i_sub.fecha_hora_inscripcion) = '2024'
+      and s.numero = s_sub.numero
+  )
+order by
+  s.nombre;
+
+/* 304.5 - Instructores haraganes.
+ * Listar los instructores que dictan menos cursos durante 2024 que el promedio 
+ * de la cantidad de cursos que dicta cada instructor en 2024. Se deben tener en 
+ * cuenta para el promedio los instructores que no dictan cursos.
+ * Indicar legajo, nombre y apellido del instructor y la cantidad de cursos 
+ * que dicta en 2024.Ordenar por cantidad de cursos descendente. */
+drop temporary table if exists dict_cur;
+
+create temporary table if not exists dict_cur
+select
+  i.legajo,
+  count(c.numero) cant_dict
+from
+  instructor i
+  left join curso c on c.legajo_instructor = i.legajo
+where
+  year(c.fecha_inicio) = '2024'
+group by
+  i.legajo;
+
+select
+  avg(cant_dict) into @prom_dict_cur
+from
+  dict_cur;
+
+select
+  i.legajo,
+  i.nombre,
+  i.apellido,
+  dc.cant_dict
+from
+  instructor i
+  inner join dict_cur dc on i.legajo = dc.legajo
+where
+  dc.cant_dict < @prom_dict_cur
+order by
+  dc.cant_dict desc;
+
+drop temporary table if exists dict_cur;
