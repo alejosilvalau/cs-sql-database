@@ -128,3 +128,72 @@ order by
   cant_ins desc;
 
 drop temporary table if exists cant_ins_socios;
+/* 302.4 - Embarcaciones sin salidas recientes.
+ * Listar las embarcaciones que hayan tenido salidas 
+ * el último año pero no en los últimos 6 meses. Indicar hin, 
+ * nombre y descripción de la embarcación. Ordenar por nombre.*/
+select
+  distinct e.hin,
+  e.nombre,
+  e.descripcion
+from
+  embarcacion e
+  inner join salida s on e.hin = s.hin
+where
+  s.fecha_hora_salida BETWEEN '2024-01-01'
+  AND '2024-12-31'
+  and s.hin not in (
+    select
+      s_sub.hin
+    from
+      salida s_sub
+    where
+      s_sub.hin = s.hin
+      and s_sub.fecha_hora_salida between '2025-05-01'
+      and '2025-09-20'
+  )
+order by
+  e.nombre;
+
+/* 302.5 - Embarcaciones con pocas salidas.
+ * Listar las embarcaciones que tuvieron menos salidas en 
+ * 2024 que el promedio de salidas de cada socio en 2024. 
+ * Se deben tener en cuenta en el promedio los socios sin salidas. 
+ * Indicar hin, nombre y descripción de la embarcación y cantidad de salidas. 
+ * Ordenar por cantidad de salidas descendente. */
+drop temporary table if exists cant_sal_soc;
+
+create temporary table if not exists cant_sal_soc
+select
+  distinct soc.numero,
+  e.hin,
+  count(s.hin) cant_sal
+from
+  socio soc
+  left join embarcacion e on e.numero_socio = soc.numero
+  left join salida s on s.hin = e.hin
+where
+  year(s.fecha_hora_salida) = '2024'
+group by
+  soc.numero,
+  e.hin;
+
+select
+  avg(css.cant_sal) into @prom_sal
+from
+  cant_sal_soc css;
+
+select
+  css.hin,
+  e.nombre,
+  e.descripcion,
+  css.cant_sal
+from
+  cant_sal_soc css
+  inner join embarcacion e on e.hin = css.hin
+where
+  css.cant_sal < @prom_sal
+order by
+  cant_sal desc;
+
+drop temporary table if exists cant_sal_soc;
