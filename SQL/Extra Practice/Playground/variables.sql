@@ -77,7 +77,7 @@ group by
   nom_plan,
   nro_examen;
 
-/* Ordenar los alumnos de Marketing 1 por nota y 
+/* Ordenar los alumnos de Marketing 1 por nota y
  fecha de evolución descendientes y numerarlos según ese orden */
 set
   @i := 0;
