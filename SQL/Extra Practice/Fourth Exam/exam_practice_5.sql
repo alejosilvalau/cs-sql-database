@@ -158,7 +158,6 @@ from
 
 rollback;
 
-
 commit;
 
 -- Prueba de trigger de actualización
