@@ -28,10 +28,34 @@ select
 from
   habitacion;
 
+select
+  *
+from
+  valor_propiedad;
+
+select
+  *
+from
+  propiedad;
+
 start transaction;
 
 -- Insert común
+insert into
+  valor_propiedad (id_propiedad, fecha_hora_desde, valor)
+values
+  (12001, CURRENT_TIMESTAMP, 3000000);
+
 -- Insert select
+insert into
+  valor_propiedad (id_propiedad, fecha_hora_desde, valor)
+select
+  id,
+  CURRENT_TIMESTAMP,
+  10
+from
+  propiedad;
+
 -- Delete común
 delete from
   habitacion
@@ -52,5 +76,20 @@ where
   th.nombre = 'Dormitorio';
 
 -- Update común
--- Update select
+update
+  valor_propiedad
+set
+  valor = 2000000
+where
+  id_propiedad = 12001;
+
+-- Update join
+update
+  propiedad p
+  inner join valor_propiedad vp on p.id = vp.id_propiedad
+set
+  p.direccion = 'Calle Falsa 123'
+where
+  vp.valor < 500000;
+
 rollback;
