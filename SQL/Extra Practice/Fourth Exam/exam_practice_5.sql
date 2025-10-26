@@ -315,7 +315,10 @@ commit;
 
 -- Ejercicio 3
 -- Agregar columna cant_inscriptos a la tabla cursos, permitiendo nulos
-alter table cursos add column cant_inscriptos int(11) default null;
+alter table
+  cursos
+add
+  column cant_inscriptos int(11) default null;
 
 -- Actualizar la tabla cursos, agregando los datos agregados de la nueva columna de cant_inscriptos
 START TRANSACTION;
@@ -329,7 +332,7 @@ select
   count(i.`nro_curso`) cant
 from
   cursos c
-  left  join `inscripciones` i on c.`nom_plan` = i.`nom_plan`
+  left join `inscripciones` i on c.`nom_plan` = i.`nom_plan`
   and c.`nro_curso` = i.`nro_curso`
 group by
   c.`nom_plan`,
@@ -345,37 +348,78 @@ set
 commit;
 
 -- Verificación de la actualización
-select * from cursos;
+select
+  *
+from
+  cursos;
 
 -- Modificación de la columna cant_inscriptos para que no permita nulos
-alter table cursos modify cant_inscriptos int(11) not null;
+alter table
+  cursos
+modify
+  cant_inscriptos int(11) not null;
 
 -- Creación del trigger para mantener actualizada la columna cant_inscriptos al insertar nuevas inscripciones
 DROP TRIGGER IF EXISTS `afatse_mod`.`inscripciones_AFTER_INSERT`;
 
-DELIMITER $$
-USE `afatse_mod`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `afatse_mod`.`inscripciones_AFTER_INSERT` AFTER INSERT ON `inscripciones` FOR EACH ROW
-BEGIN
-update cursos
-set cant_inscriptos=cant_inscriptos + 1
-where nom_plan=new.nom_plan and nro_curso=new.nro_curso;
-END$$
-DELIMITER ;
+DELIMITER $ $ USE `afatse_mod` $ $ CREATE DEFINER = CURRENT_USER TRIGGER `afatse_mod`.`inscripciones_AFTER_INSERT`
+AFTER
+INSERT
+  ON `inscripciones` FOR EACH ROW BEGIN
+update
+  cursos
+set
+  cant_inscriptos = cant_inscriptos + 1
+where
+  nom_plan = new.nom_plan
+  and nro_curso = new.nro_curso;
+
+END $ $ DELIMITER;
 
 -- Creación del trigger para mantener actualizada la columna cant_inscriptos al eliminar inscripciones
 DROP TRIGGER IF EXISTS `afatse_mod`.`inscripciones_before_del_tr`;
 
-DELIMITER $$
-USE `afatse_mod`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `afatse_mod`.`inscripciones_before_del_tr` BEFORE DELETE ON `inscripciones` FOR EACH ROW
-BEGIN
-update cursos
-set cant_inscriptos=cant_inscriptos - 1
-where nom_plan=old.nom_plan and nro_curso=old.nro_curso;
-END$$
-DELIMITER ;
+DELIMITER $ $ USE `afatse_mod` $ $ CREATE DEFINER = CURRENT_USER TRIGGER `afatse_mod`.`inscripciones_before_del_tr` BEFORE DELETE ON `inscripciones` FOR EACH ROW BEGIN
+update
+  cursos
+set
+  cant_inscriptos = cant_inscriptos - 1
+where
+  nom_plan = old.nom_plan
+  and nro_curso = old.nro_curso;
 
---
+END $ $ DELIMITER;
 
+-- Ejercicio 4
+alter table
+  valores_plan
+add
+  column usuario_alta varchar(50);
 
+-- Trigger para asignar el usuario que realiza la inserción en la tabla valores_plan
+DROP TRIGGER IF EXISTS `afatse_mod`.`valores_plan_before_ins_tr`;
+
+DELIMITER $ $ USE `afatse_mod` $ $ CREATE DEFINER = CURRENT_USER TRIGGER `afatse_mod`.`valores_plan_before_ins_tr` BEFORE
+INSERT
+  ON `valores_plan` FOR EACH ROW BEGIN
+set
+  new.usuario_alta = CURRENT_USER;
+
+END $ $ DELIMITER;
+
+-- Prueba del trigger
+start transaction;
+
+insert into
+  valores_plan (nom_plan, fecha_desde_plan, valor_plan) value("Marketing 1", '20231101', 34000);
+
+insert into
+  valores_plan (nom_plan, fecha_desde_plan, valor_plan) value("Marketing 2", '20231101', 24000);
+
+rollback;
+commit;
+
+select
+  *
+from
+  valores_plan;
