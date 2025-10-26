@@ -297,6 +297,7 @@ VALUES
   );
 
 commit;
+
 rollback;
 
 -- Verificación de primer trigger (inserción)
@@ -313,10 +314,68 @@ where
 commit;
 
 -- Ejercicio 3
+-- Agregar columna cant_inscriptos a la tabla cursos, permitiendo nulos
+alter table cursos add column cant_inscriptos int(11) default null;
 
+-- Actualizar la tabla cursos, agregando los datos agregados de la nueva columna de cant_inscriptos
+START TRANSACTION;
 
+drop temporary table if exists insc_curso;
 
+create temporary table insc_curso
+select
+  c.`nom_plan`,
+  c.`nro_curso`,
+  count(i.`nro_curso`) cant
+from
+  cursos c
+  left  join `inscripciones` i on c.`nom_plan` = i.`nom_plan`
+  and c.`nro_curso` = i.`nro_curso`
+group by
+  c.`nom_plan`,
+  c.`nro_curso`;
 
+update
+  cursos c
+  inner join insc_curso ic on c.`nom_plan` = ic.`nom_plan`
+  and c.`nro_curso` = ic.`nro_curso`
+set
+  c.`cant_inscriptos` = ic.cant;
 
+commit;
+
+-- Verificación de la actualización
+select * from cursos;
+
+-- Modificación de la columna cant_inscriptos para que no permita nulos
+alter table cursos modify cant_inscriptos int(11) not null;
+
+-- Creación del trigger para mantener actualizada la columna cant_inscriptos al insertar nuevas inscripciones
+DROP TRIGGER IF EXISTS `afatse_mod`.`inscripciones_AFTER_INSERT`;
+
+DELIMITER $$
+USE `afatse_mod`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `afatse_mod`.`inscripciones_AFTER_INSERT` AFTER INSERT ON `inscripciones` FOR EACH ROW
+BEGIN
+update cursos
+set cant_inscriptos=cant_inscriptos + 1
+where nom_plan=new.nom_plan and nro_curso=new.nro_curso;
+END$$
+DELIMITER ;
+
+-- Creación del trigger para mantener actualizada la columna cant_inscriptos al eliminar inscripciones
+DROP TRIGGER IF EXISTS `afatse_mod`.`inscripciones_before_del_tr`;
+
+DELIMITER $$
+USE `afatse_mod`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `afatse_mod`.`inscripciones_before_del_tr` BEFORE DELETE ON `inscripciones` FOR EACH ROW
+BEGIN
+update cursos
+set cant_inscriptos=cant_inscriptos - 1
+where nom_plan=old.nom_plan and nro_curso=old.nro_curso;
+END$$
+DELIMITER ;
+
+--
 
 
