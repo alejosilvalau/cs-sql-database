@@ -417,6 +417,7 @@ insert into
   valores_plan (nom_plan, fecha_desde_plan, valor_plan) value("Marketing 2", '20231101', 24000);
 
 rollback;
+
 commit;
 
 select

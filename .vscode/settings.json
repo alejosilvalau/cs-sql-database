@@ -117,6 +117,20 @@
       "name": "afatse_mod",
       "database": "afatse_mod",
       "username": "root"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "inmobiliaria_calciferhowl_mod",
+      "database": "inmobiliaria_calciferhowl_mod",
+      "username": "root"
     }
   ]
 }
