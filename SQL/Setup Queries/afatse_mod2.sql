@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `afatse_mod` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `afatse_mod`;
+CREATE DATABASE  IF NOT EXISTS `afatse_mod2` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `afatse_mod2`;
 -- MySQL dump 10.13  Distrib 8.0.43, for Linux (x86_64)
 --
--- Host: localhost    Database: afatse_mod
+-- Host: localhost    Database: afatse_mod2
 -- ------------------------------------------------------
 -- Server version	8.0.43-0ubuntu0.24.04.2
 
@@ -396,7 +396,7 @@ DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `inscripciones_AFTER_INSERT` AFTER INSERT ON `inscripciones` FOR EACH ROW BEGIN
 update cursos
 set cant_inscriptos=cant_inscriptos + 1
-where nom_plan=new.nom_plan and nro_curso=new.nro_curso; 
+where nom_plan=new.nom_plan and nro_curso=new.nro_curso;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -450,7 +450,7 @@ CREATE TABLE `instructores` (
 
 LOCK TABLES `instructores` WRITE;
 /*!40000 ALTER TABLE `instructores` DISABLE KEYS */;
-INSERT INTO `instructores` VALUES ('30-30303030-3','Rosa','Pelaes','3030303','rpelaes77@afatse_mod.com.ar','9 de Julio 3030','99-99999999-9'),('31-31313131-3','Jacinto','Ibañes','3131313','jibañes@afatse_mod.com.ar','Pte. Roca 3131','99-99999999-9'),('55-55555555-5','Henri','Amiel','5555555','hamiel@afatse_mod.com.ar','Ayacucho 5555',NULL),('66-66666666-6','Franz','Kafka','6666666','fkafka@afatse_mod.com.ar','San Luis 666 6F','55-55555555-5'),('77-77777777-7','Francisco','Umbral','7777777','fumbral@afatse_mod.com.ar','Italia 777','55-55555555-5'),('88-88888888-8','Otto','Wagner','8888888','owagner@afatse_mod.com.ar','Rondeau 888','77-77777777-7'),('99-99999999-9','Elias','Yanes','9999999','eyanes@afatse_mod.com.ar','27 de Febrero 999','88-88888888-8');
+INSERT INTO `instructores` VALUES ('30-30303030-3','Rosa','Pelaes','3030303','rpelaes77@afatse_mod2.com.ar','9 de Julio 3030','99-99999999-9'),('31-31313131-3','Jacinto','Ibañes','3131313','jibañes@afatse_mod.com.ar','Pte. Roca 3131','99-99999999-9'),('55-55555555-5','Henri','Amiel','5555555','hamiel@afatse_mod.com.ar','Ayacucho 5555',NULL),('66-66666666-6','Franz','Kafka','6666666','fkafka@afatse_mod.com.ar','San Luis 666 6F','55-55555555-5'),('77-77777777-7','Francisco','Umbral','7777777','fumbral@afatse_mod.com.ar','Italia 777','55-55555555-5'),('88-88888888-8','Otto','Wagner','8888888','owagner@afatse_mod.com.ar','Rondeau 888','77-77777777-7'),('99-99999999-9','Elias','Yanes','9999999','eyanes@afatse_mod.com.ar','27 de Febrero 999','88-88888888-8');
 /*!40000 ALTER TABLE `instructores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -481,7 +481,7 @@ CREATE TABLE `materiales` (
 
 LOCK TABLES `materiales` WRITE;
 /*!40000 ALTER TABLE `materiales` DISABLE KEYS */;
-INSERT INTO `materiales` VALUES ('AP-001','Introducción al Marketing','www.afatse_mod.com.ar/apuntes?AP=001','Antonio Gramsci',2.500,'2012-08-01',0,NULL,NULL),('AP-002','Estructura de la PC','www.afatse_mod.com.ar/apuntes?AP=002','Juan Carlos Onetit',3.000,'2012-08-05',0,NULL,NULL),('AP-003','Sectores de Mercado y Trageting','www.afatse_mod.com.ar/apuntes?AP=003','Rafael Alberti',3.900,'2013-05-08',0,NULL,NULL),('AP-004','Sistemas Operativos Modernos','www.afatse_mod.com.ar/apuntes?AP=004','Andrew Tanembaum',4.000,'2013-11-27',0,NULL,NULL),('AP-005','Redes','www.afatse_mod.com.ar/apuntes?AP=005','Andrew Tanembaum',7.300,'2013-12-02',0,NULL,NULL),('AP-006','Imagen y Competencia','www.afatse_mod.com.ar/apuntes?AP=006','Rafael Muñiz Gonzales y Erica de Forifregoro',3.000,'2014-05-04',0,NULL,NULL),('AP-007','Usuarios y Seguridad','www.afatse_mod.com.ar/apuntes?AP=007','Andrew Tanembaum',6.000,'2014-02-08',0,NULL,NULL),('AP-008','Utilidades de diagnostico','www.afatse_mod.com.ar/apuntes?AP=008','Erica de Forifregoro',4.000,'2014-04-09',0,NULL,NULL),('AP-009','Deteccion de hackers','www.afatse_mod.com.ar/apuntes?AP=009','Erica de Forifregoro',5.700,'2014-05-17',0,NULL,NULL),('UT-001','Birome',NULL,NULL,NULL,NULL,98,20,200),('UT-002','Carpeta con metallas',NULL,NULL,NULL,NULL,7,15,100),('UT-003','Hojas A4 lisas',NULL,NULL,NULL,NULL,5500,2000,5000),('UT-004','Diskete 3 1/2',NULL,NULL,NULL,NULL,57,30,100),('UT-005','lapiz negro',NULL,NULL,NULL,NULL,0,30,1000);
+INSERT INTO `materiales` VALUES ('AP-001','Introducción al Marketing','www.afatse_mod2.com.ar/apuntes?AP=001','Antonio Gramsci',2.500,'2012-08-01',0,NULL,NULL),('AP-002','Estructura de la PC','www.afatse_mod.com.ar/apuntes?AP=002','Juan Carlos Onetit',3.000,'2012-08-05',0,NULL,NULL),('AP-003','Sectores de Mercado y Trageting','www.afatse_mod.com.ar/apuntes?AP=003','Rafael Alberti',3.900,'2013-05-08',0,NULL,NULL),('AP-004','Sistemas Operativos Modernos','www.afatse_mod.com.ar/apuntes?AP=004','Andrew Tanembaum',4.000,'2013-11-27',0,NULL,NULL),('AP-005','Redes','www.afatse_mod.com.ar/apuntes?AP=005','Andrew Tanembaum',7.300,'2013-12-02',0,NULL,NULL),('AP-006','Imagen y Competencia','www.afatse_mod.com.ar/apuntes?AP=006','Rafael Muñiz Gonzales y Erica de Forifregoro',3.000,'2014-05-04',0,NULL,NULL),('AP-007','Usuarios y Seguridad','www.afatse_mod.com.ar/apuntes?AP=007','Andrew Tanembaum',6.000,'2014-02-08',0,NULL,NULL),('AP-008','Utilidades de diagnostico','www.afatse_mod.com.ar/apuntes?AP=008','Erica de Forifregoro',4.000,'2014-04-09',0,NULL,NULL),('AP-009','Deteccion de hackers','www.afatse_mod.com.ar/apuntes?AP=009','Erica de Forifregoro',5.700,'2014-05-17',0,NULL,NULL),('UT-001','Birome',NULL,NULL,NULL,NULL,98,20,200),('UT-002','Carpeta con metallas',NULL,NULL,NULL,NULL,7,15,100),('UT-003','Hojas A4 lisas',NULL,NULL,NULL,NULL,5500,2000,5000),('UT-004','Diskete 3 1/2',NULL,NULL,NULL,NULL,57,30,100),('UT-005','lapiz negro',NULL,NULL,NULL,NULL,0,30,1000);
 /*!40000 ALTER TABLE `materiales` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -494,8 +494,8 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `materiales_after_ins_tr` AFTER INSERT ON `materiales` FOR EACH ROW BEGIN
-if new.cant_disponible is not null then 
-	insert into stock_movimientos 
+if new.cant_disponible is not null then
+	insert into stock_movimientos
 		(cod_material, cantidad_movida, cantidad_restante, usuario_movimiento)
         values
         (new.cod_material, new.cant_disponible, new.cant_disponible, current_user);
@@ -516,7 +516,7 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `materiales_before_upd_tr` BEFORE UPDATE ON `materiales` FOR EACH ROW BEGIN
-if new.cant_disponible is not null then 
+if new.cant_disponible is not null then
 	if old.cant_disponible <> new.cant_disponible then
 		insert into
 		  stock_movimientos(
@@ -739,7 +739,7 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `valores_plan_before_ins_tr` BEFORE INSERT ON `valores_plan` FOR EACH ROW BEGIN
-set new.usuario_alta=CURRENT_USER; 
+set new.usuario_alta=CURRENT_USER;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -748,11 +748,11 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
--- Dumping events for database 'afatse_mod'
+-- Dumping events for database 'afatse_mod2'
 --
 
 --
--- Dumping routines for database 'afatse_mod'
+-- Dumping routines for database 'afatse_mod2'
 --
 /*!50003 DROP FUNCTION IF EXISTS `alumnos_deudas_a_fecha` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -837,25 +837,25 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `stock_movimiento`(in cod_mat char(6), in cant_movida integer(11), out stock integer(11))
 BEGIN
      declare url varchar(50);
-     
+
      start transaction;
      select url_descarga into url from materiales where
     cod_material = cod_mat;
-    
-    if url is null then 
+
+    if url is null then
 		update materiales set cant_disponible = cant_disponible + cant_movida
         where cod_material=cod_mat;
-	end if; 
-    
-    SELECT cant_disponible INTO stock 
+	end if;
+
+    SELECT cant_disponible INTO stock
     FROM materiales
-	WHERE cod_material = cod_mat;       
+	WHERE cod_material = cod_mat;
 
 	if stock>=0 then
 		commit;
 	else
-		rollback; 
-	
+		rollback;
+
 		select cant_disponible
 		into stock from materiales
 		where cod_material = cod_mat;

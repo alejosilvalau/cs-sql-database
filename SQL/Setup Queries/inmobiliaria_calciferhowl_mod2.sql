@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `inmobiliaria_calciferhowl_mod` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `inmobiliaria_calciferhowl_mod`;
+CREATE DATABASE  IF NOT EXISTS `inmobiliaria_calciferhowl_mod2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `inmobiliaria_calciferhowl_mod2`;
 -- MySQL dump 10.13  Distrib 8.0.43, for Linux (x86_64)
 --
--- Host: localhost    Database: inmobiliaria_calciferhowl_mod
+-- Host: localhost    Database: inmobiliaria_calciferhowl_mod2
 -- ------------------------------------------------------
 -- Server version	8.0.43-0ubuntu0.24.04.2
 
@@ -245,7 +245,7 @@ CREATE TABLE `propiedad` (
 
 LOCK TABLES `propiedad` WRITE;
 /*!40000 ALTER TABLE `propiedad` DISABLE KEYS */;
-INSERT INTO `propiedad` VALUES (12001,'Castillo Errante, DimensiÃ³n MÃ¡gica',_binary '\0\0\0\0\0\0\00L¦\nFMAÀ©\ĞD\Ø0MÀ',2004,'castillo','Espacio MÃ³vil','alquilada'),(12002,'Hangar 7, Ã“rbita de Marte',_binary '\0\0\0\0\0\0\0R\' ‰°q2@\ä\É\åGS@',2071,'nave espacial','Ã“rbita de Marte','alquilada'),(12003,'Via Cagliostro 1, Italia',_binary '\0\0\0\0\0\0\0jMóóD@x$(ş(@',1979,'mansiÃ³n','Italia','seÃ±ada'),(12004,'Torre Beika, Shinjuku, Tokio',_binary '\0\0\0\0\0\0\0\ÇK7‰A\ØA@•\Ô	h\"va@',1994,'departamento','Tokio','alquilada'),(12005,'Niihama Loft, Niihama, JapÃ³n',_binary '\0\0\0\0\0\0\0ÿ²{ò°ˆE@¡\Ö4\ï8«a@',2029,'departamento','JapÃ³n','seÃ±ada'),(12006,'Sector 7, Colonia Side 7',_binary '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',79,'estaciÃ³n espacial','Espacio','en oferta'),(12007,'Sector 3, Colonia Side 3',_binary '\0\0\0\0\0\0\0-C\ë\â6\Z?-C\ë\â6\Z?',79,'estaciÃ³n espacial','Espacio','en oferta'),(12008,'DÃ¡rsena 5, Babylon 5',_binary '\0\0\0\0\0\0\0\Åş²{ò°(@&Â†§[P@',2257,'estaciÃ³n espacial','Espacio Neutral','en oferta'),(12009,'Palacio Real, Alderaan',_binary '\0\0\0\0\0\0\0\0\0\0\0\0€F@\0\0\0\0\0@WÀ',-19,'castillo','Galaxia Muy Lejana','en oferta'),(12010,'Hangar 94, Mos Eisley',_binary '\0\0\0\0\0\0\0C\ë\â6\ZB@¥½ÁHa@',-19,'nave espacial','Galaxia Muy Lejana','alquilada'),(12011,'Isla de Avalon, Lago Encantado',_binary '\0\0\0\0\0\0\0\Åş²{òÀI@\ë\â6\ZÀ[À¿',500,'mansiÃ³n','Reino MÃ¡gico','en oferta'),(12012,'Arrakis, Duna Profunda',_binary '\0\0\0\0\0\0\0†8\Ö\Åm49@\ß\à“©¢K@',10191,'casa','Duna','seÃ±ada'),(12013,'Sendero 42, Bosque Encantado',_binary '\0\0\0\0\0\0\0\Ì\î\É\ÃB5CÀ»¸ğ\ÎOÀ',1988,'cabaÃ±a','Bosque Encantado','seÃ±ada'),(12014,'DÃ¡rsena 1, EstaciÃ³n Nadesico',_binary '\0\0\0\0\0\0\0óSt$—¿?\Ïf\Õ\çj+\â?',2196,'estaciÃ³n espacial','Ã“rbita de la Tierra','en oferta'),(12015,'Avenida HÃ©roes 1000, Ciudad GÃ³tica',_binary '\0\0\0\0\0\0\0^K\È=[D@ªñ\ÒMb€RÀ',1939,'mansiÃ³n','Ciudad GÃ³tica','a verificar');
+INSERT INTO `propiedad` VALUES (12001,'Castillo Errante, DimensiÃ³n MÃ¡gica',_binary '\0\0\0\0\0\0\00Lï¿½\nFMAï¿½ï¿½\ï¿½D\ï¿½0Mï¿½',2004,'castillo','Espacio MÃ³vil','alquilada'),(12002,'Hangar 7, Ã“rbita de Marte',_binary '\0\0\0\0\0\0\0R\'ï¿½ï¿½ï¿½q2@\ï¿½\ï¿½\ï¿½GS@',2071,'nave espacial','Ã“rbita de Marte','alquilada'),(12003,'Via Cagliostro 1, Italia',_binary '\0\0\0\0\0\0\0jMï¿½ï¿½D@x$(ï¿½(@',1979,'mansiÃ³n','Italia','seÃ±ada'),(12004,'Torre Beika, Shinjuku, Tokio',_binary '\0\0\0\0\0\0\0\ï¿½K7ï¿½A\ï¿½A@ï¿½\ï¿½	h\"va@',1994,'departamento','Tokio','alquilada'),(12005,'Niihama Loft, Niihama, JapÃ³n',_binary '\0\0\0\0\0\0\0ï¿½ï¿½{ï¿½E@ï¿½\ï¿½4\ï¿½8ï¿½a@',2029,'departamento','JapÃ³n','seÃ±ada'),(12006,'Sector 7, Colonia Side 7',_binary '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',79,'estaciÃ³n espacial','Espacio','en oferta'),(12007,'Sector 3, Colonia Side 3',_binary '\0\0\0\0\0\0\0-C\ï¿½\ï¿½6\Z?-C\ï¿½\ï¿½6\Z?',79,'estaciÃ³n espacial','Espacio','en oferta'),(12008,'DÃ¡rsena 5, Babylon 5',_binary '\0\0\0\0\0\0\0\ï¿½ï¿½ï¿½{ï¿½(@ï¿½&Â†ï¿½[P@',2257,'estaciÃ³n espacial','Espacio Neutral','en oferta'),(12009,'Palacio Real, Alderaan',_binary '\0\0\0\0\0\0\0\0\0\0\0\0ï¿½F@\0\0\0\0\0@Wï¿½',-19,'castillo','Galaxia Muy Lejana','en oferta'),(12010,'Hangar 94, Mos Eisley',_binary '\0\0\0\0\0\0\0C\ï¿½\ï¿½6\ZB@ï¿½ï¿½ï¿½Ha@',-19,'nave espacial','Galaxia Muy Lejana','alquilada'),(12011,'Isla de Avalon, Lago Encantado',_binary '\0\0\0\0\0\0\0\ï¿½ï¿½ï¿½{ï¿½ï¿½I@\ï¿½\ï¿½6\Zï¿½[ï¿½ï¿½',500,'mansiÃ³n','Reino MÃ¡gico','en oferta'),(12012,'Arrakis, Duna Profunda',_binary '\0\0\0\0\0\0\0ï¿½8\ï¿½\ï¿½m49@\ï¿½\ï¿½ï¿½ï¿½ï¿½K@',10191,'casa','Duna','seÃ±ada'),(12013,'Sendero 42, Bosque Encantado',_binary '\0\0\0\0\0\0\0\ï¿½\ï¿½\ï¿½\ï¿½B5Cï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½Oï¿½',1988,'cabaÃ±a','Bosque Encantado','seÃ±ada'),(12014,'DÃ¡rsena 1, EstaciÃ³n Nadesico',_binary '\0\0\0\0\0\0\0ï¿½St$ï¿½ï¿½?\ï¿½f\ï¿½\ï¿½j+\ï¿½?',2196,'estaciÃ³n espacial','Ã“rbita de la Tierra','en oferta'),(12015,'Avenida HÃ©roes 1000, Ciudad GÃ³tica',_binary '\0\0\0\0\0\0\0^K\ï¿½=[D@ï¿½ï¿½\ï¿½Mbï¿½Rï¿½',1939,'mansiÃ³n','Ciudad GÃ³tica','a verificar');
 /*!40000 ALTER TABLE `propiedad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -418,11 +418,11 @@ INSERT INTO `visita` VALUES (11003,11007,12001,'2023-02-10 10:00:00','2023-03-01
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'inmobiliaria_calciferhowl_mod'
+-- Dumping events for database 'inmobiliaria_calciferhowl_mod2'
 --
 
 --
--- Dumping routines for database 'inmobiliaria_calciferhowl_mod'
+-- Dumping routines for database 'inmobiliaria_calciferhowl_mod2'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `actualiza_importe_solicitud` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -458,7 +458,7 @@ order by
   fecha_hora_desde desc
 limit
   1;
-  
+
 update
   solicitud_contrato
 set
@@ -506,7 +506,7 @@ order by
   fecha_hora_desde desc
 limit
   1;
-  
+
 update
   solicitud_contrato
 set
