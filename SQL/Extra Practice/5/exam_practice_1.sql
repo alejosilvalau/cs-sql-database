@@ -33,5 +33,10 @@ inner join cuotas cuo
 on  alu.dni = cuo.dni
 where cuo.nom_plan is null;
 
+select @@log_bin_trust_function_creators;
+
+select current_(), current_user();
+
+
 
 
