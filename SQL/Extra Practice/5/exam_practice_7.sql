@@ -1,7 +1,7 @@
 /*
-REC.2- Mejoras al modelo. 
+REC.2- Mejoras al modelo.
 
-Tras haber utilizado nuestro sistema algún tiempo se ha 
+Tras haber utilizado nuestro sistema algún tiempo se ha
 detectado una nueva necesidad de la empresa.
 
 Las actividades deben poder asociarse a más de un tipo de
@@ -29,7 +29,7 @@ CREATE TABLE `guarderia_gaghiel_mod`.`actividad_tipo_embarcacion` (
     REFERENCES `guarderia_gaghiel_mod`.`tipo_embarcacion` (`codigo`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
-    
+
 start transaction;
 
 insert into actividad_tipo_embarcacion
@@ -38,9 +38,9 @@ from actividad;
 
 commit;
 
-ALTER TABLE `guarderia_gaghiel_mod`.`actividad` 
+ALTER TABLE `guarderia_gaghiel_mod`.`actividad`
 DROP FOREIGN KEY `fk_actividad_tipo_embarcacion`;
-ALTER TABLE `guarderia_gaghiel_mod`.`actividad` 
+ALTER TABLE `guarderia_gaghiel_mod`.`actividad`
 DROP COLUMN `codigo_tipo_embarcacion`,
 DROP INDEX `fk_actividad_tipo_embarcacion_idx` ;
 ;
@@ -50,10 +50,12 @@ select * from actividad_tipo_embarcacion;
 
 insert into actividad_tipo_embarcacion values (5, 1);
 
-select * 
+select *
 from actividad_tipo_embarcacion ate
 inner join actividad a on
 	ate.numero_actividad = a.numero
 inner join tipo_embarcacion te on
 	ate.codigo_tipo_embarcacion = te.codigo
 where a.numero = 1;
+
+rollback;
