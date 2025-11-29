@@ -44,7 +44,7 @@ commit;
 ALTER TABLE `convenciones_underground_mod`.`encargado_evento` 
 ADD COLUMN `id_rol` INT NULL AFTER `rol`,
 ADD INDEX `fk_encargado_evento_rol_idx` (`id_rol` ASC) VISIBLE;
-;
+
 ALTER TABLE `convenciones_underground_mod`.`encargado_evento` 
 ADD CONSTRAINT `fk_encargado_evento_rol`
   FOREIGN KEY (`id_rol`)
@@ -92,5 +92,6 @@ CHANGE COLUMN `fecha_asignacion_ini` `fecha_asignacion_ini` DATE NOT NULL ;
 -- 4. 
 ALTER TABLE `convenciones_underground_mod`.`encargado_evento` 
 DROP PRIMARY KEY,
-ADD PRIMARY KEY (`id_evento`, `cuil_encargado`, `id_rol`);
-;
+ADD PRIMARY KEY (`id_evento`, `cuil_encargado`, `id_rol`, `fecha_asignacion_ini`);
+
+
