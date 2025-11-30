@@ -1,21 +1,36 @@
-CREATE DATABASE  IF NOT EXISTS `inmobiliaria_calciferhowl_mod2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `inmobiliaria_calciferhowl_mod2`;
--- MySQL dump 10.13  Distrib 8.0.43, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.4.5-5, for Linux (x86_64)
 --
--- Host: localhost    Database: inmobiliaria_calciferhowl_mod2
+-- Host: 127.0.0.1    Database: inmobiliaria_calciferhowl_mod3
 -- ------------------------------------------------------
--- Server version	8.0.43-0ubuntu0.24.04.2
+-- Server version	8.4.5-5
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!50717 SELECT COUNT(*) INTO @rocksdb_has_p_s_session_variables FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'performance_schema' AND TABLE_NAME = 'session_variables' */;
+/*!50717 SET @rocksdb_get_is_supported = IF (@rocksdb_has_p_s_session_variables, 'SELECT COUNT(*) INTO @rocksdb_is_supported FROM performance_schema.session_variables WHERE VARIABLE_NAME=\'rocksdb_bulk_load\'', 'SELECT 0') */;
+/*!50717 PREPARE s FROM @rocksdb_get_is_supported */;
+/*!50717 EXECUTE s */;
+/*!50717 DEALLOCATE PREPARE s */;
+/*!50717 SET @rocksdb_enable_bulk_load = IF (@rocksdb_is_supported, 'SET SESSION rocksdb_bulk_load = 1', 'SET @rocksdb_dummy_bulk_load = 0') */;
+/*!50717 PREPARE s FROM @rocksdb_enable_bulk_load */;
+/*!50717 EXECUTE s */;
+/*!50717 DEALLOCATE PREPARE s */;
+
+--
+-- Current Database: `inmobiliaria_calciferhowl_mod3`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `inmobiliaria_calciferhowl_mod3` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `inmobiliaria_calciferhowl_mod3`;
 
 --
 -- Table structure for table `agente_asignado`
@@ -157,7 +172,7 @@ CREATE TABLE `habitacion` (
 
 LOCK TABLES `habitacion` WRITE;
 /*!40000 ALTER TABLE `habitacion` DISABLE KEYS */;
-INSERT INTO `habitacion` VALUES (12001,13002,1,12),(12001,13003,2,25),(12001,13008,1,40),(12001,13010,1,15),(12002,13006,4,10),(12002,13011,1,20),(12002,13012,1,30),(12002,13013,1,18),(12003,13002,2,15),(12003,13003,3,30),(12003,13004,4,10),(12003,13009,1,25),(12004,13002,1,8),(12004,13003,1,15),(12004,13004,1,6),(12005,13002,1,10),(12005,13003,1,18),(12005,13004,1,7),(12006,13002,2,12),(12006,13011,1,30),(12006,13012,1,35),(12007,13002,1,10),(12007,13003,1,15),(12007,13004,1,8),(12008,13002,2,14),(12008,13003,2,20),(12008,13012,1,40),(12009,13002,2,15),(12009,13003,2,30),(12009,13008,1,50),(12010,13006,3,12),(12010,13011,1,18),(12010,13012,1,25),(12010,13013,1,15),(12011,13002,1,12),(12011,13003,2,18),(12011,13009,1,22),(12012,13002,1,10),(12012,13003,1,15),(12012,13004,1,7),(12013,13002,1,8),(12013,13003,1,12),(12013,13007,1,6),(12014,13002,1,10),(12014,13003,1,15),(12014,13012,1,20),(12015,13002,2,14),(12015,13003,2,20),(12015,13014,1,30);
+INSERT INTO `habitacion` VALUES (12001,13001,3,18),(12001,13002,1,12),(12001,13003,2,25),(12001,13008,1,40),(12001,13010,1,15),(12002,13006,4,10),(12002,13011,1,20),(12002,13012,1,30),(12002,13013,1,18),(12003,13001,6,20),(12003,13002,2,15),(12003,13003,3,30),(12003,13004,4,10),(12003,13009,1,25),(12004,13001,2,12),(12004,13002,1,8),(12004,13003,1,15),(12004,13004,1,6),(12005,13001,2,14),(12005,13002,1,10),(12005,13003,1,18),(12005,13004,1,7),(12006,13001,4,20),(12006,13002,2,12),(12006,13011,1,30),(12006,13012,1,35),(12007,13001,3,16),(12007,13002,1,10),(12007,13003,1,15),(12007,13004,1,8),(12008,13001,5,22),(12008,13002,2,14),(12008,13003,2,20),(12008,13012,1,40),(12009,13001,6,25),(12009,13002,2,15),(12009,13003,2,30),(12009,13008,1,50),(12010,13006,3,12),(12010,13011,1,18),(12010,13012,1,25),(12010,13013,1,15),(12011,13001,4,20),(12011,13002,1,12),(12011,13003,2,18),(12011,13009,1,22),(12012,13001,2,14),(12012,13002,1,10),(12012,13003,1,15),(12012,13004,1,7),(12013,13001,1,10),(12013,13002,1,8),(12013,13003,1,12),(12013,13007,1,6),(12014,13001,3,16),(12014,13002,1,10),(12014,13003,1,15),(12014,13012,1,20),(12015,13001,5,22),(12015,13002,2,14),(12015,13003,2,20),(12015,13014,1,30);
 /*!40000 ALTER TABLE `habitacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +222,7 @@ CREATE TABLE `persona` (
   `cuil` varchar(14) DEFAULT NULL,
   `matricula` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21031 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21029 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +260,7 @@ CREATE TABLE `propiedad` (
 
 LOCK TABLES `propiedad` WRITE;
 /*!40000 ALTER TABLE `propiedad` DISABLE KEYS */;
-INSERT INTO `propiedad` VALUES (12001,'Castillo Errante, Dimensión Mágica',_binary '\0\0\0\0\0\0\00L�\nFMA��\�D\�0M�',2004,'castillo','Espacio Móvil','alquilada'),(12002,'Hangar 7, Órbita de Marte',_binary '\0\0\0\0\0\0\0R\'���q2@\�\�\�GS@',2071,'nave espacial','Órbita de Marte','alquilada'),(12003,'Via Cagliostro 1, Italia',_binary '\0\0\0\0\0\0\0jM��D@x$(�(@',1979,'mansión','Italia','señada'),(12004,'Torre Beika, Shinjuku, Tokio',_binary '\0\0\0\0\0\0\0\�K7�A\�A@�\�	h\"va@',1994,'departamento','Tokio','alquilada'),(12005,'Niihama Loft, Niihama, Japón',_binary '\0\0\0\0\0\0\0��{�E@�\�4\�8�a@',2029,'departamento','Japón','señada'),(12006,'Sector 7, Colonia Side 7',_binary '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',79,'estación espacial','Espacio','en oferta'),(12007,'Sector 3, Colonia Side 3',_binary '\0\0\0\0\0\0\0-C\�\�6\Z?-C\�\�6\Z?',79,'estación espacial','Espacio','en oferta'),(12008,'Dársena 5, Babylon 5',_binary '\0\0\0\0\0\0\0\���{�(@�&�[P@',2257,'estación espacial','Espacio Neutral','en oferta'),(12009,'Palacio Real, Alderaan',_binary '\0\0\0\0\0\0\0\0\0\0\0\0�F@\0\0\0\0\0@W�',-19,'castillo','Galaxia Muy Lejana','en oferta'),(12010,'Hangar 94, Mos Eisley',_binary '\0\0\0\0\0\0\0C\�\�6\ZB@���Ha@',-19,'nave espacial','Galaxia Muy Lejana','alquilada'),(12011,'Isla de Avalon, Lago Encantado',_binary '\0\0\0\0\0\0\0\���{��I@\�\�6\Z�[��',500,'mansión','Reino Mágico','en oferta'),(12012,'Arrakis, Duna Profunda',_binary '\0\0\0\0\0\0\0�8\�\�m49@\�\����K@',10191,'casa','Duna','señada'),(12013,'Sendero 42, Bosque Encantado',_binary '\0\0\0\0\0\0\0\�\�\�\�B5C�����\�O�',1988,'cabaña','Bosque Encantado','señada'),(12014,'Dársena 1, Estación Nadesico',_binary '\0\0\0\0\0\0\0�St$��?\�f\�\�j+\�?',2196,'estación espacial','Órbita de la Tierra','en oferta'),(12015,'Avenida Héroes 1000, Ciudad Gótica',_binary '\0\0\0\0\0\0\0^K\�=[D@��\�Mb�R�',1939,'mansión','Ciudad Gótica','a verificar');
+INSERT INTO `propiedad` VALUES (12001,'Castillo Errante, Dimensión Mágica',0x000000000101000000304CA60A464D41C0A913D044D8304DC0,2004,'castillo','Espacio Móvil','alquilada'),(12002,'Hangar 7, Órbita de Marte',0x0000000001010000005227A089B0713240E4141DC9E5475340,2071,'nave espacial','Órbita de Marte','alquilada'),(12003,'Via Cagliostro 1, Italia',0x000000000101000000166A4DF38EF3444003780B2428FE2840,1979,'mansión','Italia','señada'),(12004,'Torre Beika, Shinjuku, Tokio',0x000000000101000000C74B378941D8414095D4096822766140,1994,'departamento','Tokio','alquilada'),(12005,'Niihama Loft, Niihama, Japón',0x000000000101000000FFB27BF2B0884540A1D634EF38AB6140,2029,'departamento','Japón','señada'),(12006,'Sector 7, Colonia Side 7',0x00000000010100000000000000000000000000000000000000,79,'estación espacial','Espacio','en oferta'),(12007,'Sector 3, Colonia Side 3',0x0000000001010000002D431CEBE2361A3F2D431CEBE2361A3F,79,'estación espacial','Espacio','en oferta'),(12008,'Dársena 5, Babylon 5',0x000000000101000000C5FEB27BF2B028408126C286A75B5040,2257,'estación espacial','Espacio Neutral','en oferta'),(12009,'Palacio Real, Alderaan',0x000000000101000000000000000080464000000000004057C0,-19,'castillo','Galaxia Muy Lejana','en oferta'),(12010,'Hangar 94, Mos Eisley',0x000000000101000000431CEBE2361A424012A5BDC117486140,-19,'nave espacial','Galaxia Muy Lejana','alquilada'),(12011,'Isla de Avalon, Lago Encantado',0x000000000101000000C5FEB27BF2C04940EBE2361AC05BC0BF,500,'mansión','Reino Mágico','en oferta'),(12012,'Arrakis, Duna Profunda',0x0000000001010000008638D6C56D343940DFE00B93A9A24B40,10191,'casa','Duna','señada'),(12013,'Sendero 42, Bosque Encantado',0x000000000101000000CCEEC9C3423543C0BBB88D06F0CE4FC0,1988,'cabaña','Bosque Encantado','señada'),(12014,'Dársena 1, Estación Nadesico',0x000000000101000000F38E53742497BF3FCF66D5E76A2BE23F,2196,'estación espacial','Órbita de la Tierra','en oferta'),(12015,'Avenida Héroes 1000, Ciudad Gótica',0x0000000001010000005E4BC8073D5B4440AAF1D24D628052C0,1939,'mansión','Ciudad Gótica','a verificar');
 /*!40000 ALTER TABLE `propiedad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,7 +324,7 @@ CREATE TABLE `solicitud_contrato` (
 
 LOCK TABLES `solicitud_contrato` WRITE;
 /*!40000 ALTER TABLE `solicitud_contrato` DISABLE KEYS */;
-INSERT INTO `solicitud_contrato` VALUES (22001,'2023-03-05',1161000.000,'contratos/12001/11003/2023-03-05','en alquiler',765432,'2023-03-25',11007,12001,'2023-02-10 10:00:00',11003),(22002,'2023-03-12',155000.000,'contratos/12001/11004/2023-03-12','rechazada',NULL,NULL,11007,12001,'2023-02-10 10:00:00',11004),(22003,'2023-06-05',125000.000,'contratos/12002/11006/2023-06-05','en alquiler',876543,'2023-06-25',11009,12002,'2023-05-01 12:00:00',11006),(22004,'2023-08-05',210000.000,'contratos/12003/11007/2023-08-05','rechazada',NULL,NULL,11010,12003,'2023-07-20 14:00:00',11007),(22005,'2024-02-05',95000.000,'contratos/12004/11008/2024-02-05','en alquiler',1234567,'2024-02-25',11011,12004,'2024-01-10 10:00:00',11008),(22006,'2024-05-05',115000.000,'contratos/12005/11009/2024-05-05','en proceso',NULL,NULL,11012,12005,'2024-04-05 16:00:00',11009),(22007,'2023-10-05',175000.000,'contratos/12006/11010/2023-10-05','rechazada',NULL,NULL,11013,12006,'2023-09-01 13:00:00',11010),(22008,'2024-04-05',180000.000,'contratos/12006/11011/2024-04-05','rechazada',NULL,NULL,11014,12006,'2024-03-01 10:00:00',11011),(22009,'2023-12-05',135000.000,'contratos/12007/11012/2023-12-05','rechazada',NULL,NULL,11015,12007,'2023-11-10 15:00:00',11012),(22010,'2024-03-05',130000.000,'contratos/12008/11013/2024-03-05','en proceso',NULL,NULL,11007,12008,'2024-02-20 12:00:00',11013),(22011,'2024-01-10',120000.000,'contratos/12009/11014/2024-01-10','rechazada',NULL,NULL,11008,12009,'2023-12-01 11:00:00',11014),(22012,'2024-06-15',135000.000,'contratos/12010/11015/2024-06-15','en alquiler',4567890,'2024-07-05',11009,12010,'2024-05-10 10:00:00',11015),(22013,'2023-11-20',110000.000,'contratos/12011/11003/2023-11-20','en proceso',NULL,NULL,11010,12011,'2023-10-15 14:00:00',11003),(22014,'2024-06-10',115000.000,'contratos/12012/11004/2024-06-10','en proceso',NULL,NULL,11011,12012,'2024-06-01 13:00:00',11004),(22015,'2024-08-01',95000.000,'contratos/12013/11005/2024-08-01','en proceso',NULL,NULL,11012,12013,'2024-07-20 15:00:00',11005);
+INSERT INTO `solicitud_contrato` VALUES (22001,'2023-03-05',155000.000,'contratos/12001/11003/2023-03-05','en alquiler',765432,'2023-03-25',11007,12001,'2023-02-10 10:00:00',11003),(22002,'2023-03-12',155000.000,'contratos/12001/11004/2023-03-12','rechazada',NULL,NULL,11007,12001,'2023-02-10 10:00:00',11004),(22003,'2023-06-05',125000.000,'contratos/12002/11006/2023-06-05','en alquiler',876543,'2023-06-25',11009,12002,'2023-05-01 12:00:00',11006),(22004,'2023-08-05',210000.000,'contratos/12003/11007/2023-08-05','rechazada',NULL,NULL,11010,12003,'2023-07-20 14:00:00',11007),(22005,'2024-02-05',95000.000,'contratos/12004/11008/2024-02-05','en alquiler',1234567,'2024-02-25',11011,12004,'2024-01-10 10:00:00',11008),(22006,'2024-05-05',115000.000,'contratos/12005/11009/2024-05-05','en proceso',NULL,NULL,11012,12005,'2024-04-05 16:00:00',11009),(22007,'2023-10-05',175000.000,'contratos/12006/11010/2023-10-05','rechazada',NULL,NULL,11013,12006,'2023-09-01 13:00:00',11010),(22008,'2024-04-05',180000.000,'contratos/12006/11011/2024-04-05','rechazada',NULL,NULL,11014,12006,'2024-03-01 10:00:00',11011),(22009,'2023-12-05',135000.000,'contratos/12007/11012/2023-12-05','rechazada',NULL,NULL,11015,12007,'2023-11-10 15:00:00',11012),(22010,'2024-03-05',130000.000,'contratos/12008/11013/2024-03-05','en proceso',NULL,NULL,11007,12008,'2024-02-20 12:00:00',11013),(22011,'2024-01-10',120000.000,'contratos/12009/11014/2024-01-10','rechazada',NULL,NULL,11008,12009,'2023-12-01 11:00:00',11014),(22012,'2024-06-15',135000.000,'contratos/12010/11015/2024-06-15','en alquiler',4567890,'2024-07-05',11009,12010,'2024-05-10 10:00:00',11015),(22013,'2023-11-20',110000.000,'contratos/12011/11003/2023-11-20','en proceso',NULL,NULL,11010,12011,'2023-10-15 14:00:00',11003),(22014,'2024-06-10',115000.000,'contratos/12012/11004/2024-06-10','en proceso',NULL,NULL,11011,12012,'2024-06-01 13:00:00',11004),(22015,'2024-08-01',95000.000,'contratos/12013/11005/2024-08-01','en proceso',NULL,NULL,11012,12013,'2024-07-20 15:00:00',11005);
 /*!40000 ALTER TABLE `solicitud_contrato` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -374,7 +389,7 @@ CREATE TABLE `valor_propiedad` (
   `valor` decimal(10,3) NOT NULL,
   PRIMARY KEY (`id_propiedad`,`fecha_hora_desde`),
   CONSTRAINT `fk_valor_propiedad_propiedad` FOREIGN KEY (`id_propiedad`) REFERENCES `propiedad` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12016 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -416,110 +431,10 @@ LOCK TABLES `visita` WRITE;
 INSERT INTO `visita` VALUES (11003,11007,12001,'2023-02-10 10:00:00','2023-03-01 11:00:00'),(11004,11007,12001,'2023-02-10 10:00:00','2023-03-10 12:00:00'),(11013,11007,12008,'2024-02-20 12:00:00','2024-03-01 13:00:00'),(11014,11008,12009,'2023-12-01 11:00:00','2023-12-10 17:00:00'),(11006,11009,12002,'2023-05-01 12:00:00','2023-06-01 13:00:00'),(11015,11009,12010,'2024-05-10 10:00:00','2024-06-10 12:00:00'),(11007,11010,12003,'2023-07-20 14:00:00','2023-08-01 15:00:00'),(11008,11011,12004,'2024-01-10 10:00:00','2024-02-01 10:00:00'),(11009,11012,12005,'2024-04-05 16:00:00','2024-05-01 17:00:00'),(11010,11013,12006,'2023-09-01 13:00:00','2023-10-01 16:00:00'),(11011,11014,12006,'2024-03-01 10:00:00','2024-04-01 14:00:00'),(11012,11015,12007,'2023-11-10 15:00:00','2023-12-01 18:00:00'),(21013,11016,12014,'2025-06-15 15:00:00','2025-06-16 12:00:00'),(21014,11017,12014,'2025-07-01 15:00:00','2025-07-02 13:00:00'),(21015,11018,12015,'2025-07-05 16:00:00','2025-07-06 14:00:00'),(21016,11019,12015,'2025-07-05 16:00:00','2025-07-07 15:00:00'),(21017,11020,12013,'2024-07-20 15:00:00','2024-07-21 11:00:00'),(21018,11021,12006,'2025-04-01 12:00:00','2025-04-02 16:00:00'),(21019,11022,12007,'2025-05-01 13:00:00','2025-05-02 17:00:00'),(21020,11023,12008,'2025-06-01 14:00:00','2025-06-02 14:00:00'),(21021,11024,12009,'2025-07-01 15:00:00','2025-07-02 18:00:00'),(21022,11025,12010,'2025-07-05 16:00:00','2025-07-06 13:00:00'),(21023,11026,12011,'2023-10-15 14:00:00','2023-10-16 17:00:00'),(21024,11027,12012,'2024-06-01 13:00:00','2024-06-02 12:00:00'),(21025,11028,12013,'2024-07-20 15:00:00','2024-07-22 14:00:00'),(21026,11029,12014,'2025-06-15 15:00:00','2025-06-17 15:00:00'),(21027,11030,12015,'2025-07-05 16:00:00','2025-07-08 16:00:00');
 /*!40000 ALTER TABLE `visita` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'inmobiliaria_calciferhowl_mod2'
---
-
---
--- Dumping routines for database 'inmobiliaria_calciferhowl_mod2'
---
-/*!50003 DROP PROCEDURE IF EXISTS `actualiza_importe_solicitud` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `actualiza_importe_solicitud`(in p_id_sol int unsigned)
-BEGIN
-
-declare id_prop int unsigned;
-declare val_act decimal(10, 3);
-
-start transaction;
-select
-  id_propiedad into id_prop
-from
-  solicitud_contrato
-where
-  id = p_id_sol;
-
-select
-  valor into val_act
-from
-  valor_propiedad
-where
-  id_propiedad = id_prop and fecha_hora_desde <= now()
-order by
-  fecha_hora_desde desc
-limit
-  1;
-
-update
-  solicitud_contrato
-set
-  importe_mensual = val_act
-where
-  id = p_id_sol;
-commit;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `new_procedure` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `new_procedure`(in p_id_sol int unsigned)
-BEGIN
-
-declare id_prop int unsigned;
-declare val_act decimal(10, 3);
-
-start transaction;
-select
-  id_propiedad into id_prop
-from
-  solicitud_contrato
-where
-  id = p_id_sol;
-
-select
-  valor into val_act
-from
-  valor_propiedad
-where
-  id_propiedad = id_prop and fecha_hora_desde <= now()
-order by
-  fecha_hora_desde desc
-limit
-  1;
-
-update
-  solicitud_contrato
-set
-  importe_mensual = val_act
-where
-  id = p_id_sol;
-commit;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50112 SET @disable_bulk_load = IF (@is_rocksdb_supported, 'SET SESSION rocksdb_bulk_load = @old_rocksdb_bulk_load', 'SET @dummy_rocksdb_bulk_load = 0') */;
+/*!50112 PREPARE s FROM @disable_bulk_load */;
+/*!50112 EXECUTE s */;
+/*!50112 DEALLOCATE PREPARE s */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -530,4 +445,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-19 15:10:26
+-- Dump completed on 2025-07-27  8:29:55
