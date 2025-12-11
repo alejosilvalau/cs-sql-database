@@ -27,6 +27,7 @@ from solicitud_contrato;
 commit;
 alter table inmobiliaria_calciferhowl_mod3.solicitud_contrato drop foreign key fk_solicitud_contrato_persona;
 alter table inmobiliaria_calciferhowl_mod3.solicitud_contrato drop column id_cliente;
+
 /*
  * AD.A2 -  Oportunidades perdidas. Listar las solicitudes con estado rechazada cuyo
  * importe mensual pactado sea mayor o igual al 70% del valor de la propiedad a la fecha
@@ -56,6 +57,7 @@ from solicitud_contrato sc
 where sc.estado = 'rechazada'
 	and sc.importe_mensual / vp.valor >= 0.7
 	and g.id_solicitud is null;
+
 /*
  * AD.A3 - Trending props. En base a las visitas de 2025, listar la propiedad más popular de cada mes.
  * se considera la propiedad más popular de cada mes a la que tenga mayor cantidad de visitas el
@@ -329,3 +331,187 @@ where
 		visita v
 	where
 		v.fecha_hora_visita >= suv.fecha_contrato );
+
+/*
+ * AD.B3 -  Agente del año. En base a las solicitudes con contrato,
+ * listar para cada año quien fue el mejor agente. El mejor agente
+ * de un año es aquel cuya, suma de importes mensuales de todas las
+ * solicitudes que gestionó y se hayan contratado ese año, sea la más
+ * alta (en base a la fecha de contrato de la solicitud de contrato).
+ * En cada año se debe indicar el mejor agente (o los mejores si vendieran
+ * la misma cantidad) y para ese año indicar los datos de la mejor de las
+ * solicitudes de dicho agente (la que tenga importe más alto). Indicar año;
+ * id, nombre y apellido del agente, total de importes mensuales; id, fecha
+ * de solicitud, importe mensual y fecha de contrato de la mejor solicitud;
+ * id, nombre y apellido del cliente de dicha solicitud. Si un año no hubiera
+ * solicitudes con contrato no debe mostrarse Nota: la función year devuelve
+ * el año de una fecha
+ */
+
+-- Mi Solución
+with count_agente_anio as (
+select
+	sc.id_agente,
+	year(sc.fecha_contrato) anio,
+	sum(sc.importe_mensual) importe_agregado,
+	max(sc.importe_mensual) importe_max
+from
+	solicitud_contrato sc
+where
+	fecha_contrato is not null
+group by
+	sc.id_agente,
+	year(sc.fecha_contrato)
+),
+max_agente_anio as (
+select
+	anio,
+	max(importe_agregado) max_importe_agregado
+from
+	count_agente_anio
+group by
+	anio
+)
+select
+	maa.anio,
+	a.id agente_id,
+	a.nombre agente_nom,
+	a.apellido agente_ape,
+	sc.id solicitud_id,
+	sc.fecha_solicitud,
+	sc.importe_mensual,
+	sc.fecha_contrato,
+	c.id cliente_id,
+	c.nombre cliente_nom,
+	c.apellido cliente_ape
+from
+	count_agente_anio caa
+inner join max_agente_anio maa on
+	maa.anio = caa.anio
+	and
+	maa.max_importe_agregado = caa.importe_agregado
+inner join persona a on
+	a.id = caa.id_agente
+inner join solicitud_contrato sc on
+	year(sc.fecha_solicitud) = caa.anio
+	and
+	sc.id_agente = caa.id_agente
+	and
+	sc.importe_mensual = caa.importe_max
+inner join persona c on
+	sc.id_cliente = c.id
+where
+	sc.fecha_contrato is not null;
+
+-- Solución de la cátedra
+with tot_ag as (
+select
+	year(sc.fecha_contrato) anio,
+	sc.id_agente ,
+	ag.nombre nombre_agente,
+	ag.apellido apellido_agente ,
+	sum(sc.importe_mensual) total_importes ,
+	max(sc.importe_mensual) mejor_imp
+from
+	solicitud_contrato sc
+inner join persona ag on
+	sc.id_agente = ag.id
+where
+	sc.fecha_contrato is not null
+group by
+	year(sc.fecha_contrato) ,
+	sc.id_agente,
+	ag.nombre,
+	ag.apellido ),
+max_anio as (
+select
+	anio,
+	max(total_importes) max_anio
+from
+	tot_ag
+group by
+	anio )
+select
+	ta.anio,
+	ta.id_agente,
+	ta.nombre_agente,
+	ta.apellido_agente ,
+	ta.total_importes ,
+	sc.id,
+	sc.fecha_solicitud,
+	sc.importe_mensual,
+	sc.fecha_contrato ,
+	cli.id id_cliente,
+	cli.nombre nombre_cliente,
+	cli.apellido apellido_cliente
+from
+	tot_ag ta
+inner join max_anio ma on
+	ta.anio = ma.anio
+	and ta.total_importes = ma.max_anio
+inner join solicitud_contrato sc on
+	ta.id_agente = sc.id_agente
+	and year(sc.fecha_contrato)= ta.anio
+	and sc.importe_mensual = ta.mejor_imp
+inner join persona cli on
+	sc.id_cliente = cli.id
+where
+	sc.fecha_contrato is not null;
+
+	/*
+ * AD.B4 -  Tendencia de busqueda. La empresa requiere un listado de las
+ * propiedades cuya cantidad de visitas en 2025 supere al promedio de
+ * cantidad de visitas de cada propiedad del mismo tipo durante 2024.
+ * Si una propiedad no tiene visitas debería tenerse en cuenta como 0 para
+ * el promedio. Indicar id, tipo, zona y situación de la propiedad, cantidad
+ * de visitas en 2025 y promedio de visitas del tipo de propiedad en 2024.
+ */
+
+
+with cant_vis_prop as (
+select
+	p.id,
+	p.tipo,
+	p.zona,
+	p.situacion,
+	year(v.fecha_hora_visita) anio,
+	count(v.id_propiedad) cant_vis
+from
+	propiedad p
+left join visita v on
+	v.id_propiedad = p.id
+where
+	year(v.fecha_hora_visita)
+	between 2024
+	and 2025
+group by
+	p.id,
+	p.tipo,
+	p.zona,
+	p.situacion,
+	year(v.fecha_hora_visita)
+),
+prom_tipo_prop as (
+select
+	cvp.tipo,
+	avg(cvp.cant_vis) prom_vis
+from
+	cant_vis_prop cvp
+where
+	anio = 2024
+group by
+	cvp.tipo
+)
+select
+	cvp.id,
+	cvp.tipo,
+	cvp.zona,
+	cvp.situacion,
+	cvp.cant_vis,
+	coalesce(ptp.prom_vis, 0) promedio_vis
+from
+	cant_vis_prop cvp
+left join prom_tipo_prop ptp on
+	ptp.tipo = cvp.tipo
+where
+	cvp.cant_vis > coalesce(ptp.prom_vis, 0);
