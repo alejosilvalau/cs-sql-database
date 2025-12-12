@@ -55,6 +55,90 @@ COMMIT;
 -- Eliminar estructura anterior
 DROP TABLE visita;
 
+-- Mi solución
+create table inmobiliaria_calciferhowl_mod4.evento_visita (
+	id int unsigned auto_increment not null,
+	id_agente int unsigned not null,
+	id_propiedad int unsigned not null,
+	fecha_hora_desde datetime not null,
+	fecha_hora_visita datetime not null,
+	constraint pk_evento_visita primary key (id),
+	constraint fk_evento_visita_agente_asignado foreign key (id_agente,
+id_propiedad,
+fecha_hora_desde) references inmobiliaria_calciferhowl_mod4.agente_asignado(id_agente,
+id_propiedad,
+fecha_hora_desde) on
+delete
+	restrict on
+	update
+		cascade
+)
+engine = InnoDB
+default CHARSET = utf8mb4
+collate = utf8mb4_0900_ai_ci;
+
+CREATE TABLE inmobiliaria_calciferhowl_mod4.asistente_visita (
+	id_visita int unsigned NOT NULL,
+	id_cliente int unsigned NOT NULL,
+	CONSTRAINT pk_asistente_visita PRIMARY KEY (id_visita,id_cliente),
+	CONSTRAINT fk_asistente_visita_evento_visita FOREIGN KEY (id_visita) REFERENCES inmobiliaria_calciferhowl_mod4.evento_visita(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+	CONSTRAINT fk_asistente_visita_persona FOREIGN KEY (id_cliente) REFERENCES inmobiliaria_calciferhowl_mod4.persona(id) ON DELETE RESTRICT ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+start transaction;
+
+-- El inner join lo usé acá para evitar errores de integridad
+insert
+	into
+	evento_visita (id_agente,
+	id_propiedad,
+	fecha_hora_desde,
+	fecha_hora_visita)
+select
+	v.id_agente,
+	v.id_propiedad,
+	v.fecha_hora_desde,
+	v.fecha_hora_visita
+from
+	visita v
+inner join agente_asignado aa on
+	v.id_agente = aa.id_agente
+	and v.id_propiedad = aa.id_propiedad
+	and v.fecha_hora_desde = aa.fecha_hora_desde;
+
+insert
+	into
+	asistente_visita
+select
+	ev.id,
+	v.id_cliente
+from
+	visita v
+inner join evento_visita ev on
+	v.id_agente = ev.id_agente
+	and v.id_propiedad = ev.id_propiedad
+	and v.fecha_hora_desde = ev.fecha_hora_desde;
+
+commit;
+
+DROP TABLE inmobiliaria_calciferhowl_mod4.visita;
+
+select
+	v.id_agente v_id_agente,
+	v.id_propiedad v_id_propiedad,
+	v.fecha_hora_desde v_fecha_hora_desde,
+	aa.id_agente aa_id_agente,
+	aa.id_propiedad aa_id_propiedad,
+	aa.fecha_hora_desde aa_fecha_hora_desde
+from
+	visita v
+left join agente_asignado aa on
+	v.id_agente = aa.id_agente
+	and v.id_propiedad = aa.id_propiedad
+	and v.fecha_hora_desde = aa.fecha_hora_desde;
 
 /*
  * AD.C2 - Propiedades "Vidriera".
@@ -100,6 +184,61 @@ INNER JOIN valor_propiedad vp ON vp.id_propiedad = v25.id_propiedad
     )
 WHERE pcc.id_propiedad IS NULL;
 
+-- Mi solución
+with cant_vis_prop as (
+select
+	p.id,
+	count(1) cant_vis,
+	max(v.fecha_hora_visita) ult_vis
+from
+	visita v
+inner join propiedad p on
+	p.id = v.id_propiedad
+where
+	year(v.fecha_hora_visita) = 2025
+	and p.id not in (
+	select
+		distinct sub_sc.id_propiedad
+	from
+		solicitud_contrato sub_sc
+	where
+		sub_sc.estado in ('en alquiler', 'en proceso')
+		and year(sub_sc.fecha_solicitud) = 2025
+		and sub_sc.id_propiedad = p.id )
+group by
+	p.id
+having
+	cant_vis >= 5 ),
+cot_prop_vis as (
+select
+	cvp.id,
+	vp.valor val_prop
+from
+	valor_propiedad vp
+inner join cant_vis_prop cvp on
+	vp.id_propiedad = cvp.id
+	and
+	vp.fecha_hora_desde = (
+	select
+		max(sub_vp.fecha_hora_desde)
+	from
+		valor_propiedad sub_vp
+	where
+		sub_vp.id_propiedad = cvp.id
+		and
+	sub_vp.fecha_hora_desde <= cvp.ult_vis ))
+select
+	p.id,
+	p.zona,
+	p.direccion,
+	cvp.cant_vis,
+	cpv.val_prop
+from
+	cant_vis_prop cvp
+inner join cot_prop_vis cpv on
+	cvp.id = cpv.id
+inner join propiedad p on
+	p.id = cvp.id;
 
 /*
  * AD.C3 - Cliente del Año (Ranking por Grupos).
