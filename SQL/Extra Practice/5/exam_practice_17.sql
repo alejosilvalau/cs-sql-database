@@ -277,6 +277,44 @@ INNER JOIN max_pago_por_anio mpa ON pca.anio = mpa.anio
 INNER JOIN persona per ON pca.id_cliente = per.id
 ORDER BY pca.anio DESC;
 
+-- Mi solución
+with tot_pag_per as (
+select
+	year(p.fecha_hora_pago) anio,
+	per.id,
+	per.nombre,
+	per.apellido,
+	sum(p.importe) tot_pagado
+from
+	pago p
+inner join solicitud_contrato sc on
+	p.id_solicitud = sc.id
+inner join persona per on
+	sc.id_cliente = per.id
+group by
+	year(p.fecha_hora_pago),
+	per.id,
+	per.nombre,
+	per.apellido),
+max_pag_per as (
+select
+	anio,
+	max(tot_pagado) max_tot_pagado
+from
+	tot_pag_per
+group by
+	anio
+)
+select
+	tpp.id,
+	tpp.nombre,
+	tpp.apellido,
+	tpp.tot_pagado
+from
+	max_pag_per mpp
+inner join tot_pag_per tpp on
+	mpp.anio = tpp.anio and
+	mpp.max_tot_pagado = tpp.tot_pagado;
 
 /*
  * AD.C4 - Rendimiento Superior (Comparativo).
@@ -323,7 +361,57 @@ SELECT
     pz.prom_rendimiento_zona
 FROM rendimiento_propiedad rp
 INNER JOIN promedio_zona pz ON rp.zona = pz.zona
-WHERE rp.rend/*
+WHERE rp.rendimiento > pz.prom_rendimiento_zona;
+
+-- Mi solución
+with rend_prop as (
+select
+	p.id,
+	p.zona,
+	sc.importe_mensual,
+	vp.valor,
+	(sc.importe_mensual / vp.valor) rendimiento
+from
+	solicitud_contrato sc
+inner join propiedad p on
+	sc.id_propiedad = p.id
+inner join valor_propiedad vp on
+	vp.id_propiedad = p.id
+	and vp.fecha_hora_desde = (
+	select
+		max(sub_vp.fecha_hora_desde)
+	from
+		valor_propiedad sub_vp
+	where
+		sub_vp.id_propiedad = p.id
+		and sub_vp.fecha_hora_desde <= sc.fecha_contrato
+	)
+where
+	sc.estado = 'en alquiler'
+	and sc.fecha_contrato is not null
+),
+prom_prop as (
+select
+	zona,
+	avg(rendimiento) promedio_rend
+from
+	rend_prop
+group by
+	zona
+)
+select
+	rp.id,
+	rp.zona,
+	rp.importe_mensual,
+	rp.valor,
+	pp.promedio_rend
+from
+	rend_prop rp
+inner join prom_prop pp on
+	rp.zona = pp.zona
+where rp.rendimiento > pp.promedio_rend;
+
+/*
  * AD.C1 - Reforma de Visitas (DDL + Migración).
  * Actualmente, la tabla `visita` identifica cada visita por la clave primaria compuesta
  * (id_cliente, fecha_hora_visita). Esto impide registrar que una misma visita (mismo agente,
