@@ -314,6 +314,7 @@ where
 (cc.cant_con / cs.cant_sol) > 0.5
 order by ctz.cant_zonas desc, cc.valor_tot desc
 
+
 /*
  * AD.E4 - Propiedades "Fantasma" (DDL + Query).
  * La empresa necesita detectar propiedades sospechosas que generan mucho interés
@@ -337,6 +338,180 @@ order by ctz.cant_zonas desc, cc.valor_tot desc
  * Ordenar por total de visitas descendente.
  */
 
+CREATE TABLE inmobiliaria_calciferhowl_mod4.alerta_propiedad (
+	id_propiedad int unsigned NOT NULL,
+	fecha_hora_alerta DATETIME NOT NULL,
+	tipo_alerta varchar(255) NOT NULL,
+	descripcion varchar(255) NOT NULL,
+	CONSTRAINT fk_alerta_propiedad_propiedad FOREIGN KEY (id_propiedad) REFERENCES inmobiliaria_calciferhowl_mod4.propiedad(id) ON DELETE RESTRICT ON UPDATE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- 1. Propiedades con más de 10 visitas en 2025
+DROP TEMPORARY TABLE IF EXISTS cant_vis_prop;
+CREATE TEMPORARY TABLE cant_vis_prop AS
+SELECT
+    v.id_propiedad,
+    COUNT(1) AS cant_vis
+FROM
+    visita v
+WHERE
+    YEAR(v.fecha_hora_visita) = 2025
+GROUP BY
+    v.id_propiedad
+HAVING
+    cant_vis > 10;
+
+-- 2. Fecha del último valor de cada propiedad
+DROP TEMPORARY TABLE IF EXISTS fec_valor_prop_act;
+CREATE TEMPORARY TABLE fec_valor_prop_act AS
+SELECT
+    vp.id_propiedad,
+    MAX(vp.fecha_hora_desde) AS fec_ult_val
+FROM
+    valor_propiedad vp
+WHERE
+    vp.fecha_hora_desde <= CURRENT_TIMESTAMP()
+GROUP BY
+    vp.id_propiedad;
+
+-- 3. Valor actual de cada propiedad
+DROP TEMPORARY TABLE IF EXISTS valor_prop_act;
+CREATE TEMPORARY TABLE valor_prop_act AS
+SELECT
+    vp.id_propiedad,
+    vp.fecha_hora_desde,
+    vp.valor
+FROM
+    fec_valor_prop_act fcpa
+    INNER JOIN valor_propiedad vp
+        ON fcpa.id_propiedad = vp.id_propiedad
+        AND fcpa.fec_ult_val = vp.fecha_hora_desde;
+
+-- 4. Valor promedio por zona
+DROP TEMPORARY TABLE IF EXISTS valor_prom_zona;
+CREATE TEMPORARY TABLE valor_prom_zona AS
+SELECT
+    p.zona,
+    AVG(vpa.valor) AS val_prom_zona
+FROM
+    propiedad p
+    INNER JOIN valor_prop_act vpa ON p.id = vpa.id_propiedad
+GROUP BY
+    p.zona;
+
+START TRANSACTION;
+
+-- 5. Insertar alertas
+INSERT INTO alerta_propiedad(id_propiedad, fecha_hora_alerta, tipo_alerta, descripcion)
+SELECT
+    p.id,
+    CURRENT_TIMESTAMP(),
+    'BAJA_CONVERSION',
+    'Propiedad posee muchas visitas, pero baja conversion a solicitudes de contrato'
+FROM
+    cant_vis_prop cvp
+    INNER JOIN valor_prop_act vpa ON cvp.id_propiedad = vpa.id_propiedad
+    INNER JOIN propiedad p ON cvp.id_propiedad = p.id
+    INNER JOIN valor_prom_zona vpz ON p.zona = vpz.zona
+WHERE
+    vpa.valor > vpz.val_prom_zona
+    AND cvp.id_propiedad NOT IN (
+        SELECT sub_sc.id_propiedad
+        FROM solicitud_contrato sub_sc
+        WHERE YEAR(sub_sc.fecha_solicitud) = 2025
+            AND sub_sc.id_propiedad = cvp.id_propiedad
+    );
+
+COMMIT;
+
+-- Parte query
+
+-- 1. fecha de agente asignado más reciente a la prop.
+drop temporary table if exists age_asi_rec_fec;
+create temporary table age_asi_rec_fec as
+select
+	id_propiedad,
+	max(fecha_hora_desde) ult_age_asig
+from
+	agente_asignado aa
+group by id_propiedad;
+
+-- 2. Agente asignado más reciente a la propiedad
+drop temporary table if exists age_asi_rec;
+create temporary table age_asi_rec as
+select
+	aa.id_agente,
+	aa.id_propiedad,
+	aa.fecha_hora_desde,
+	aa.fecha_hora_hasta,
+	p.nombre,
+	p.apellido
+from
+	age_asi_rec_fec aarf
+inner join agente_asignado aa on
+	aarf.id_propiedad = aa.id_propiedad
+	and aarf.ult_age_asig = aa.fecha_hora_desde
+inner join persona p on
+	aa.id_agente = p.id;
+
+-- 3. Cantidad de propiedades en alquiler por agente
+DROP TEMPORARY TABLE IF EXISTS cant_alq_age;
+create temporary table cant_alq_age as
+select
+	sc.id_agente,
+	count(1) cant_prop
+from
+	solicitud_contrato sc
+where sc.estado = 'en alquiler'
+group by sc.id_agente;
+
+-- 4. fecha de la ultima visita en 2025 por prop.
+drop temporary table if exists ult_vis_prop;
+create temporary table ult_vis_prop as
+select
+    v.id_propiedad,
+    max(v.fecha_hora_visita) as ult_vis
+from
+    visita v
+where
+    year(v.fecha_hora_visita) = 2025
+group by
+    v.id_propiedad;
+
+-- Query final
+select
+	p.id,
+	p.direccion,
+	p.zona,
+	p.tipo,
+	cvp.cant_vis,
+	uvp.ult_vis,
+	vpa.valor,
+	vpz.val_prom_zona,
+	aar.id_agente,
+	concat(aar.nombre, ' ', aar.apellido) nombre_completo,
+	coalesce(caa.cant_prop, 0) cant_prop_alquiler
+from
+	propiedad p
+inner join alerta_propiedad ap on
+	p.id = ap.id_propiedad
+inner join cant_vis_prop cvp on
+	p.id = cvp.id_propiedad
+inner join ult_vis_prop uvp on
+	p.id = uvp.id_propiedad
+inner join valor_prop_act vpa on
+	p.id = vpa.id_propiedad
+inner join valor_prom_zona vpz on
+	p.zona = vpz.zona
+inner join age_asi_rec aar on
+	p.id = aar.id_propiedad
+left join cant_alq_age caa on
+	aar.id_agente = caa.id_agente
+order by cvp.cant_vis desc;
 
 /*
  * AD.E5 - Análisis Comparativo de Garantías.
