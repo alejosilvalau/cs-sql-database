@@ -117,6 +117,7 @@ from visita v
 	and uvprop.ult_vis = v.fecha_hora_visita
 	inner join propiedad p on p.id = uvprop.id_propiedad
 	inner join persona a on a.id = v.id_agente;
+
 -- Solución propuesta por cátedra
 with visitas_mes as (
 	select month(v.fecha_hora_visita) mes,
@@ -165,34 +166,108 @@ where year(vi.fecha_hora_visita) = 2025;
  * para el promedio. Indicar id, tipo, zona, situación de la propiedad,
  * cantidad de solicitudes en 2024 y promedio de solicitudes del tipo en 2023.
  */
--- Mi solución
-with cant_sol_2024 as (
-	select p.id,
-		count(sc.id_propiedad) cant
-	from propiedad p
-		left join solicitud_contrato sc on p.id = sc.id_propiedad
-		and year(sc.fecha_solicitud) = 2024
-	group by p.id
-),
-prom_sol_2023 as (
-	select p.tipo,
-		coalesce (avg(sc.id_propiedad), 0) prom
-	from propiedad p
-		left join solicitud_contrato sc on p.id = sc.id_propiedad
-		and year(sc.fecha_solicitud) = 2023
-	group by p.tipo
-)
-select p.id,
-	p.zona,
-	p.tipo,
-	p.situacion,
-	cs24.cant,
-	ps23.prom
-from propiedad p
-	left join cant_sol_2024 cs24 on cs24.id = p.id
-	left join prom_sol_2023 ps23 on ps23.tipo = p.tipo
-where cs24.cant > ps23.prom;
 
+drop temporary table if exists cantidad_2023;
+create temporary table cantidad_2023
+select
+	pro.id,
+	pro.tipo,
+	count(sc.id_propiedad) cant_solicitudes
+from
+	propiedad pro
+left join solicitud_contrato sc on
+	pro.id = sc.id_propiedad
+	and year(sc.fecha_solicitud)= 2023
+group by
+	pro.id,
+	pro.tipo;
+
+drop temporary table if exists promedioxtipo;
+create temporary table promedioxtipo
+select
+	c23.tipo,
+	avg(c23.cant_solicitudes) promedio
+from
+	cantidad_2023 c23
+group by
+	c23.tipo;
+
+drop temporary table if exists cantidad_2024;
+create temporary table cantidad_2024
+select
+	pro.id,
+	pro.tipo,
+	pro.zona,
+	pro.situacion,
+	count(sc.id_propiedad) cant_solicitudes
+from
+	propiedad pro
+left join solicitud_contrato sc on
+	pro.id = sc.id_propiedad
+	and year(sc.fecha_solicitud)= 2024
+group by
+	pro.id,
+	pro.tipo,
+	pro.zona,
+	pro.situacion;
+
+select
+	c24.id,
+	c24.tipo,
+	c24.zona,
+	c24.situacion,
+	c24.cant_solicitudes,
+	prot.promedio
+from
+	cantidad_2024 c24
+inner join promedioxtipo prot on
+	c24.tipo = prot.tipo
+where
+	c24.cant_solicitudes > prot.promedio;
+
+-- Otra solución (Mejor)
+with sc_prop_tipo_anio as (
+select
+	p.id id_propiedad,
+	p.tipo,
+	p.zona,
+	p.situacion ,
+	year(sc.fecha_solicitud) anio ,
+	count(sc.fecha_solicitud) cant_sol
+from
+	propiedad p
+left join solicitud_contrato sc on
+	sc.id_propiedad = p.id
+group by
+	p.id,
+	p.tipo,
+	p.zona,
+	p.situacion ,
+	year(sc.fecha_solicitud) ),
+sctipo_2023 as (
+select
+	scpro.tipo,
+	avg(cant_sol) prom_sol
+from
+	sc_prop_tipo_anio scpro
+where
+	scpro.anio = 2023
+group by
+	scpro.tipo )
+select
+	scpta.id_propiedad,
+	scpta.tipo,
+	scpta.zona,
+	scpta.situacion ,
+	scpta.cant_sol cant_sol_2024 ,
+	coalesce(sctipo_2023.prom_sol, 0) prom_sol_2023
+from
+	sc_prop_tipo_anio scpta
+left join sctipo_2023 on
+	scpta.tipo = sctipo_2023.tipo
+where
+	scpta.anio = 2024
+	and scpta.cant_sol > coalesce(sctipo_2023.prom_sol, 0);
 
 /*
  * AD.B1 - La inmobiliaria nos informa que en algunas solicitudes de
